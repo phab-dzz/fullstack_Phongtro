@@ -5,6 +5,7 @@ const initState = {
     categories: [],
     prices: [],
     areas: [],
+    provinces: [],
 
 
 }
@@ -34,6 +35,12 @@ const postReducer = (state = initState, action) => {
             return {
                 ...state,
                 areas: action.areas || [],
+                msg: action.msg || '',
+            }
+        case actionTypes.GET_PROVINCES:
+            return {
+                ...state,
+                provinces: action.provinces || [],
                 msg: action.msg || '',
             }
 
