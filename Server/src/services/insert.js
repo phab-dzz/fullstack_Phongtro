@@ -36,7 +36,9 @@ export const insertService = () => new Promise(async (resolve, reject) => {
         const provinceCodes = []
         const labelCodes = []
         dataBody.forEach(cate => {
+            // console.log(`Inserting data for category: ${cate.code}`);
             cate.body.forEach(async (item) => {
+                // console.log(`Inserting post with title: ${item}`);
                 let postId = v4()
                 let labelCode = generateCode(item?.header?.class?.classType).trim()
                 labelCodes?.every(item => item?.code !== labelCode) && labelCodes.push({

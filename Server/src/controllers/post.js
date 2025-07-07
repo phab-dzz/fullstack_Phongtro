@@ -15,20 +15,33 @@ export const getPosts = async (req, res) => {
 }
 export const getPostLimit = async (req, res) => {
     // const { offset, query } = req.query
-    const { offset, ...query } = req.query
-    console.log(req.query)
-
+    const { page, ...query } = req.query
+    console.log("page" + page, "query:" + query)
 
 
     try {
 
-        const response = await postService.getPostLimitService(offset, query);
+        const response = await postService.getPostLimitService(page, query);
         return res.status(200).json(response)
     }
-    catch {
+    catch(error) {
         return res.status(500).json({
             err: -1,
             msg: 'fail in controller'
+        })
+    }
+}
+export const getNewPosts = async (req, res) => {
+    try {
+        const response = await postService.getNewPostsService();
+        return res.status(200).json(response)
+    }
+    catch(error) {
+        return res.status(500).json({
+            err: -1,
+            msg: 'fail in controller' + error
+            
+            
         })
     }
 }
