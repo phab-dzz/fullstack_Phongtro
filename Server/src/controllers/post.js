@@ -15,13 +15,13 @@ export const getPosts = async (req, res) => {
 }
 export const getPostLimit = async (req, res) => {
     // const { offset, query } = req.query
-    const { page, ...query } = req.query
-    console.log("page" + page, "query:" + query)
+     const { page, priceNumber, areaNumber, ...query } = req.query
+    // console.log("page" + page, "query:" + query)
 
 
     try {
 
-        const response = await postService.getPostLimitService(page, query);
+        const response = await postService.getPostLimitService(page, query,{ priceNumber, areaNumber });
         return res.status(200).json(response)
     }
     catch(error) {

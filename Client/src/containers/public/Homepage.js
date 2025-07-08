@@ -7,15 +7,21 @@ import { List } from './index'
 import { useSearchParams } from "react-router-dom";
 import { useSelector, useDispatch } from 'react-redux'
 import * as actions from '../../store/actions'
+import ImageSlider from "../../components/ImageSlider";
 const Homepage = () => {
     const [params] = useSearchParams()
     const { categories, prices, areas } = useSelector(state => state.app)
+   
     console.log("params" + params.get('page'))
     const dispatch = useDispatch()
+     
+  
+    
     useEffect(() => {
 
         dispatch(actions.getPrices())
         dispatch(actions.getAreas())
+        dispatch(actions.getProvinces())
 
     }, [])
 
@@ -32,15 +38,14 @@ const Homepage = () => {
                     {text.HOME_DESCRIPTION}
                 </p>
             </div >
-
             <Province />
             <div className="w-full flex gap-4">
                 <div className="w-[70%]">
                     <List page1={params.get('page')} />
                     <Pagination length={40} Number={params.get('page')} />
-                    <div className=" h-[500px]" >
+                    {/* <div className=" h-[500px]" >
 l
-                    </div>
+                    </div> */}
                 </div>
                 <div className="w-[30%] border flex flex-col gap-4 justify-start items-center ">
                     <ItemSidebar content={categories} title='Danh sach cho thue' />

@@ -97,6 +97,8 @@ const Login = () => {
     //     if (invalids === 0) isRegister ? dispatch(actions.register(payload)) : dispatch(actions.login(payload))
     // }
     return (
+        <div className="w-full flex items-center justify-center ">
+
         <div className="bg-white w-[600px] p-[30px] pd-[100px] rounded-md shadow-sm">
             <h3 className="font-semibold text-2xl mb-3">{isRegister ? 'Đăng ký tài khoản' : 'Đăng nhập'}</h3>
             <div className="w-full flex flex-col gap-3">
@@ -153,6 +155,7 @@ const Login = () => {
             </div>
 
 
+        </div>
         </div>
     )
 }

@@ -1,7 +1,12 @@
 import { Routes, Route } from 'react-router-dom';
 import { Login, Home, Rental, Homepage, DetailsPost } from './containers/public';
 import { path } from './utils/constant';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import * as actions from './store/actions';
+
 function App() {
+
   return (
     <div className="h-screen w-full bg-primary">
       <Routes>
