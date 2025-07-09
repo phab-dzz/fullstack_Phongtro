@@ -1,5 +1,5 @@
 import actionTypes from './actionTypes';
-import { apiGetPost, apiGetPostLimit,apiGetNewPosts } from '../../services/post';
+import { apiGetPost, apiGetPostLimit,apiGetNewPosts,apiGetPostById } from '../../services/post';
 export const getPosts = () => async (dispatch) => {
     try {
         const response = await apiGetPost()
@@ -70,3 +70,26 @@ export const getNewPosts = () => async (dispatch) => {
             newPosts: null
         })
     }}
+export const getPostById = (id) => async (dispatch) => {
+    try {
+        const response = await apiGetPostById(id)
+        if (response?.data.err === 0) {
+            dispatch({
+                type: actionTypes.GET_POST_BY_ID,
+                post: response.data.response
+            })
+        } else {
+            dispatch({
+                type: actionTypes.GET_POST_BY_ID,
+                msg: response.data.msg,
+                post: null
+            })
+        }
+
+    } catch (error) {
+        dispatch({
+            type: actionTypes.GET_POST_BY_ID,
+            post: null
+        })
+    }
+}

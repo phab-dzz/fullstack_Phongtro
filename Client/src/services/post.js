@@ -57,3 +57,14 @@ export const apiUploadImages = (images) => new Promise(async (resolve, reject) =
         reject(error)
     }
 })
+export const apiGetPostById = (id) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'get',
+            url: `/api/v1/post/${id}`,
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+})

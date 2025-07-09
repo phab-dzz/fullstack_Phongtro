@@ -3,7 +3,8 @@ const initState = {
     posts: [],
     msg: '',
     count: 0,
-    newPosts: []
+    newPosts: [],
+    postById: {}
 
 }
 
@@ -26,7 +27,12 @@ const postReducer = (state = initState, action) => {
                 newPosts: action.newPosts || [],
             }
     
-
+        case actionTypes.GET_POST_BY_ID:
+            return {
+                ...state,
+                postById: action.post || {},
+                msg: action.msg || ''
+            }
 
 
         default:

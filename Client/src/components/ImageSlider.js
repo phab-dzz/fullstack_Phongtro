@@ -7,14 +7,14 @@ const images = [
   "https://images.pexels.com/photos/1103970/pexels-photo-1103970.jpeg",
 ];
 
-const ImageSlider = () => {
+const ImageSlider = ({arrImages}) => {
   const [current, setCurrent] = useState(0);
-  const length = images.length;
+  const length = arrImages.length;
 
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrent((prev) => (prev === length - 1 ? 0 : prev + 1));
-    }, 3000);
+    }, 10000);
     return () => clearInterval(interval);
   }, [length]);
 
@@ -31,11 +31,11 @@ const ImageSlider = () => {
   };
 
   return (
-    <div className="w-full flex flex-col items-center mt-10">
+    <div className="w-full flex flex-col items-center ">
       {/* Slide chính */}
-      <div className="relative overflow-hidden rounded-xl shadow-lg w-[800px] h-[400px]">
+      <div className="relative overflow-hidden rounded-xl shadow-lg w-[650px] h-[400px]">
         <img
-          src={images[current]}
+          src={arrImages[current]}
           alt={`Slide ${current}`}
           className="w-full h-full object-cover transition-all duration-700"
         />
@@ -59,7 +59,7 @@ const ImageSlider = () => {
 
       {/* Chấm tròn pagination */}
       <div className="flex justify-center items-center gap-2 mt-4">
-        {images.map((_, index) => (
+        {arrImages.map((_, index) => (
           <button
             key={index}
             onClick={() => goToSlide(index)}
@@ -72,12 +72,12 @@ const ImageSlider = () => {
 
       {/* Thumbnails */}
       <div className="flex justify-center items-center mt-4 gap-3 flex-wrap">
-        {images.map((img, index) => (
+        {arrImages.map((img, index) => (
           <img
             key={index}
             src={img}
             alt={`thumb-${index}`}
-            className={`w-[100px] h-[60px] object-cover rounded-md cursor-pointer border-2 ${
+            className={`w-[60px] h-[60px] object-cover rounded-md cursor-pointer border-2 ${
               index === current ? "border-blue-600" : "border-transparent"
             }`}
             onClick={() => goToSlide(index)}

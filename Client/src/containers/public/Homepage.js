@@ -27,7 +27,7 @@ const Homepage = () => {
 
 
     return (
-        <div className="border  w-full flex flex-col gap-3 m-2">
+        <div className="  w-full flex flex-col gap-3 m-2">
 
             <div>
 

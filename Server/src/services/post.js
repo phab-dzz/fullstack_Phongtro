@@ -51,7 +51,7 @@ const queries = {...query}
                     { model: db.Attribute, as: 'attributes', attributes: ['price', 'acreage', 'published', 'hashtag'] },
                     { model: db.User, as: 'user', attributes: ['name', 'zalo', 'phone'] },
                 ],
-                attributes: ['id', 'title', 'star', 'address', 'description']
+                attributes: ['id', 'title', 'star', 'address', 'description',]
             }
             //     attributes: ['id', 'title','star', 'content', 'createdAt', 'updatedAt'],
             // }
@@ -90,6 +90,33 @@ export const getNewPostsService = () => new Promise(async (resolve, reject) => {
             response: response
         })
     }catch (error) {
+        reject(error)
+    }
+}
+)
+export const getPostByIdService = (id) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await db.Post.findOne(
+            {
+                where: { id: id },
+                raw: true,
+                nest: true,// gộp lại thành object
+                include: [
+                    { model: db.Image, as: 'images', attributes: ['image'] },
+                    { model: db.Attribute, as: 'attributes', attributes: ['price', 'acreage', 'published', 'hashtag'] },
+                    { model: db.User, as: 'user', attributes: ['name', 'zalo', 'phone','avatar','fbUrl'] },
+                ],
+                attributes: ['id', 'title', 'star', 'address', 'description','createdAt', 'updatedAt']
+            }
+        )
+        resolve({
+            err: response ? 0 : 1,
+            msg: response ? 'OK' : 'get post by Id fail',
+            response: response
+
+        })
+    } catch (error) {
+
         reject(error)
     }
 }

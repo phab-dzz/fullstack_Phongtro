@@ -45,3 +45,16 @@ export const getNewPosts = async (req, res) => {
         })
     }
 }
+export const getPostById = async (req, res) => {
+    const { id } = req.params;
+    try {
+        const response = await postService.getPostByIdService(id);
+        return res.status(200).json(response)
+    }
+    catch(error) {
+        return res.status(500).json({
+            err: -1,
+            msg: 'fail in controller' + error
+        })
+    }
+}

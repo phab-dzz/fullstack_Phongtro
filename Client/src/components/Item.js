@@ -13,6 +13,8 @@ const { GrStar, RiHeartFill, RiHeartLine, BsBookmarkStarFill } = icons
 const indexs = [0, 1, 2, 3]
 
 const Item = ({ images, user, title, star, description, attributes, address, id }) => {
+    
+    console.log("images", images)
     const [isHoverHeart, setIsHoverHeart] = useState(false)
     const navigate = useNavigate()
     const handleStar = (star) => {

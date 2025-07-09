@@ -15,9 +15,6 @@ const Search = () => {
     const [name, setName] = useState('');
     const {provinces,areas,prices,categories} = useSelector(state => state.app);
 
-    console.log('provinces', provinces)
-    console.log('areas', areas)
-    console.log('prices', prices)
 const [queries,setQueries] = useState({})
 
     const [arrMinMax, setArrMinMax] = useState({})
