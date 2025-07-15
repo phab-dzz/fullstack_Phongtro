@@ -9,6 +9,8 @@ const actionsTypes = {
     GET_POSTS_LIMIT: "GET_POSTS_LIMIT",
     GET_NEW_POST: "GET_NEW_POST",
     GET_POST_BY_ID: "GET_POST_BY_ID",
+    GET_POST_OF_CURRENT: "GET_POST_OF_CURRENT",
+    GET_POSTS_CREATED: "GET_POSTS_CREATED",
 
     GET_CATEGORIES: 'GET_CATEGORIES',
     GET_PRICES: 'GET_PRICES',
@@ -17,6 +19,7 @@ const actionsTypes = {
 
     // USER
     GET_CURRENT: 'GET_CURRENT'
+
 
 }
 export default actionsTypes;

@@ -12,18 +12,7 @@ const Homepage = () => {
     const [params] = useSearchParams()
     const { categories, prices, areas } = useSelector(state => state.app)
    
-    console.log("params" + params.get('page'))
-    const dispatch = useDispatch()
-     
-  
     
-    useEffect(() => {
-
-        dispatch(actions.getPrices())
-        dispatch(actions.getAreas())
-        dispatch(actions.getProvinces())
-
-    }, [])
 
 
     return (

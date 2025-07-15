@@ -3,6 +3,7 @@ import express from 'express';
 require('dotenv').config();
 import cors from 'cors';
 import initRoutes from './src/routes';
+import generateDate from './src/utils/generateDate';
 import generateCode from './src/utils/generateCode';
 import connectDatabase from './src/config/connectDatabase';
 const app = express();
@@ -19,6 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 // );
 initRoutes(app);
 connectDatabase();
+console.log("current date", generateDate());
 const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {

@@ -8,14 +8,10 @@ import { useSelector,useDispatch } from "react-redux";
 import ImageSlider from "../../components/ImageSlider";
 import { useEffect } from "react";
 import * as actions from '../../store/actions';
+import Footer from "./Footer";
 const Home = () => {
     const { isLoggedIn } = useSelector(state => state.auth)
-    const dispatch=useDispatch();
-    useEffect(() => {
-    setTimeout(() => {
-      isLoggedIn && dispatch(actions.getCurrent())
-    }, 1000)
-  }, [isLoggedIn])
+ 
     return (
 
         <div className="w-full flex gap-4 flex-col items-center min-h-screen">
@@ -32,11 +28,15 @@ const Home = () => {
             </div>
             <Intro />
             <Contact />
+           
+
             {/* <div className="h-[500px]">
 
             </div> */}
+             <Footer />
 
         </div>
+        
     )
 }
 export default Home;

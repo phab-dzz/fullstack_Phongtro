@@ -33,7 +33,8 @@ const icons = {
     AiOutlineLogout,
     BsChevronDown,
     ImBin,
-    BsCameraFill
+    BsCameraFill,
+    
 }
 
 export default icons

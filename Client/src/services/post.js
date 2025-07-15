@@ -61,7 +61,42 @@ export const apiGetPostById = (id) => new Promise(async (resolve, reject) => {
     try {
         const response = await axiosConfig({
             method: 'get',
-            url: `/api/v1/post/${id}`,
+            url: `/api/v1/post/postbyid/${id}`,
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+})
+export const apiCreatePost = (payload) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'post',
+            url: '/api/v1/post/create-new',
+            data: payload,
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+})
+export const apiGetPostOfCurrent = () => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'get',
+            url: '/api/v1/post/by-admin',
+           
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+})
+export const apiDeletePost = (postId) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'delete',
+            url: `/api/v1/post/delete/${postId}`,
         })
         resolve(response)
     } catch (error) {

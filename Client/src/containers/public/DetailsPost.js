@@ -5,14 +5,17 @@ import { useSearchParam,useLocation } from 'react-router-dom';
 import { getPostById } from "../../store/actions/post";
 import ImageSlider from '../../components/ImageSlider';
 import * as actions from '../../store/actions'
-import { Province, ItemSidebar,RelatedPost } from "../../components";
+import { Province, ItemSidebar,RelatedPost,MapView ,MapWithSearch} from "../../components";
 import formatDate from '../../utils/formatDate';
+
 
 import logo from '../../assets/logowithoutbg.png'
 const DetailsPost = () => {
       const location = useLocation();
   const pathParts = location.pathname.split("/");
-
+  
+ const lat = 10.7769; // Vĩ độ
+  const lng = 106.7009; // Kinh độ
   const uuid = pathParts[pathParts.length - 1];
     const dispatch = useDispatch();
     const { postById } = useSelector(state => state.post);
@@ -26,7 +29,18 @@ const DetailsPost = () => {
         }
         
     }, [uuid, dispatch]);
- 
+    console.log("postById", postById);
+//  function removeHouseNumberAdvanced(address) {
+//     console.log("address", address);
+//   return address.replace(/^((Số|No\.?)\s*)?\d+[A-Za-z\-]*\s*/i, '').trim();
+// }
+const removeHouseNumberAdvanced = (address) => {
+    if (!address) return '';
+    // Loại bỏ số nhà và ký tự đặc biệt
+   if (!address || typeof address !== 'string') return '';
+  return address.replace(/^\s*(Số\s*)?[\d\/\-A-Za-z]+\s+/, '').trim();
+  };
+
 
 
 
@@ -49,28 +63,29 @@ const DetailsPost = () => {
 
                 </div>
                 <div className='w-full flex flex-col gap-2 mt-4 bg-white-300 shadow-lg rounded-sm'>
-                    <h2 className='text-[16px] font-medium text-red-600'>{postById.title}</h2>
+                    <h2 className='text-[30px] font-medium text-red-600'>{postById.title}</h2>
                     <div className='flex items-center gap-2'>
                         <span className=' text-green-500 text-[18px]'>{postById?.attributes?.price}</span>
-                        <span className='pl-[60px] text-[14px] font-mono'>{postById?.attributes?.acreage}</span>
-                        <span className='pl-[300px] text-[14px] font-mono'>{postById?.attributes?.published}</span>
+                        <span className='pl-[60px] text-[14px] font-normal'>{postById?.attributes?.acreage}</span>
+                        <span className='pl-[300px] text-[14px] font-normal'>{postById?.attributes?.published}</span>
                     </div>
                     <div className='flex items-center gap-2'>
-                        <span className='text-[14px] font-mono'>Địa chỉ:</span>
-                        <span className=' pl-[60px] text-[14px] font-mono'>{postById?.address?.split(":")[1]}</span>
+                        <span className='text-[14px] font-medium'>Địa chỉ:</span>
+                        <span className=' pl-[60px] text-[14px] font-normal'>{postById?.address?.split(':')[1].trim()}</span>
                     </div>
                      <div className='flex items-center gap-2'>
-                        <span className='text-[14px] font-mono'>Mã tin:</span>
-                        <span className=' pl-[60px] text-[14px] font-mono'>{` #${postById?.attributes?.hashtag}`}</span>
+                        <span className='text-[14px] font-medium'>Mã tin:</span>
+                        <span className=' pl-[60px] text-[14px] font-normal'>{` #${postById?.attributes?.hashtag}`}</span>
                     </div>
                      <div className='flex items-center gap-2'>
-                        <span className='text-[14px] font-mono'>Ngày đăng :</span>
-                        <span className=' pl-[60px] text-[14px] font-mono'>{formatDate(postById?.createdAt)}</span>
+                        <span className='text-[14px] font-medium'>Ngày đăng :</span>
+                        <span className=' pl-[60px] text-[14px] font-normal'>{formatDate(postById?.createdAt)}</span>
                     </div>
                     <div className='flex flex-col items-start gap-2'>
                         <span className='text-[14px] font-medium'>Thông tin chi tiết :</span>
-                        <span className=' text-[14px] font-mono'>{postById?.description?.replace('Thông tin mô tả:', '').replace(/[-]{2,}/g, '').replace(/["']/g, '') .replace(/["'\[\]]/g, '').trim()}</span>
+                        <span className=' text-[14px] font-normal'>{postById?.description?.replace('Thông tin mô tả:', '').replace(/[-]{2,}/g, '').replace(/["']/g, '') .replace(/["'\[\]]/g, '').trim()}</span>
                         </div>
+                                            <MapWithSearch address={removeHouseNumberAdvanced(postById?.address?.split(':')[1].trim())} />
                 </div>
 
             </div>
@@ -89,11 +104,14 @@ const DetailsPost = () => {
        { 'nhắn zalo' }
                     </button>
 
+
+
                   
                 </div>
                 <div className='w-full flex flex-col gap-2'>
 
                 <RelatedPost />
+                <MapView latitude={lat} longitude={lng} />
 
            </div>
            </div>

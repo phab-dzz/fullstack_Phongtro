@@ -1,5 +1,5 @@
 import actionTypes from './actionTypes';
-import { apiGetPost, apiGetPostLimit,apiGetNewPosts,apiGetPostById } from '../../services/post';
+import { apiGetPost, apiGetPostLimit,apiGetNewPosts,apiGetPostById,apiGetPostOfCurrent,apiCreatePost } from '../../services/post';
 export const getPosts = () => async (dispatch) => {
     try {
         const response = await apiGetPost()
@@ -89,6 +89,50 @@ export const getPostById = (id) => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: actionTypes.GET_POST_BY_ID,
+            post: null
+        })
+    }
+}
+export const getPostOfCurrent = () => async (dispatch) => {
+    try {
+        const response = await apiGetPostOfCurrent()
+        if (response?.data.err === 0) {
+            dispatch({
+                type: actionTypes.GET_POST_OF_CURRENT,
+                postOfCurrent: response.data.response.rows
+            })
+        } else {
+            dispatch({
+                type: actionTypes.GET_POST_OF_CURRENT,
+                msg: response.data.msg,
+                postOfCurrent: []
+            })
+        }
+    } catch (error) {
+        dispatch({
+            type: actionTypes.GET_POST_OF_CURRENT,
+            postOfCurrent: []
+        })
+    }
+}
+export const createPost = (payload) => async (dispatch) => {
+    try {
+        const response = await apiCreatePost(payload)
+        if (response?.data.err === 0) {
+            dispatch({
+                type: actionTypes.GET_POSTS_CREATED,
+                post: response.data.response
+            })
+        } else {
+            dispatch({
+                type: actionTypes.GET_POSTS_CREATED,
+                msg: response.data.msg,
+                post: null
+            })
+        }
+    } catch (error) {
+        dispatch({
+            type: actionTypes.GET_POSTS_CREATED,
             post: null
         })
     }

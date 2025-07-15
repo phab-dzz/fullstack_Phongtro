@@ -2,6 +2,7 @@ import React, { memo, useState } from 'react'
 import icons from '../utils/icons'
 import { useNavigate, Link } from 'react-router-dom'
 import { formatVietnameseToString } from '../utils/common/formatVietnameseToString'
+import anonAvatar from '../assets/anon-avatar.png'
 const images = [
     "https://pt123.cdn.static123.com/images/thumbs/900x600/fit/2022/07/03/507ce676-0681-4fe6-bac3-55a7eef70fc3_1656803285.jpg",
     "https://pt123.cdn.static123.com/images/thumbs/900x600/fit/2022/07/03/f6480ee4-11fc-453b-882b-25f03a2bd77e_1656803279.jpg",
@@ -23,6 +24,7 @@ const Item = ({ images, user, title, star, description, attributes, address, id 
         return stars
 
     }
+    
     return (
         <div className='w-full flex border-t border-orange-600 py-4'>
             <Link
@@ -69,7 +71,7 @@ const Item = ({ images, user, title, star, description, attributes, address, id 
                 </p>
                 <div className='flex items-center my-5 justify-between'>
                     <div className=' flex items-center'>
-                        <img src="https://lnsel.com/wp-content/uploads/2018/12/anon-avatar-300x300.png" alt="avatar" className='w-[30px] h-[30px] object-cover rounded-full' />
+                        <img src={user.avatar||anonAvatar} alt="avatar" className='w-[30px] h-[30px] object-cover rounded-full' />
                         <p>{user?.name}</p>
                     </div>
                     <div className='flex items-center gap-1'>

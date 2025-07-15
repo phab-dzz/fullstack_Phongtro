@@ -1,11 +1,27 @@
 import { Routes, Route } from 'react-router-dom';
 import { Login, Home, Rental, Homepage, DetailsPost } from './containers/public';
 import { path } from './utils/constant';
-import { useDispatch } from 'react-redux';
+import { useDispatch,useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import * as actions from './store/actions';
+import { System,CreatePost,ManagePost,UserProfile } from './containers/System';
+import { ToastContainer } from 'react-toastify';
+
 
 function App() {
+  const dispatch = useDispatch()
+  const { isLoggedIn } = useSelector(state => state.auth)
+  useEffect(() => {
+    setTimeout(() => {
+      isLoggedIn && dispatch(actions.getCurrent())
+    }, 1000)
+  }, [isLoggedIn])
+
+  useEffect(() => {
+    dispatch(actions.getPrices())
+    dispatch(actions.getAreas())
+    dispatch(actions.getProvinces())
+  }, [])
 
   return (
     <div className="h-screen w-full bg-primary">
@@ -21,8 +37,14 @@ function App() {
           <Route path={'chi-tiet/*'} element={<DetailsPost />} />
 
         </Route>
+        <Route path={path.SYSTEM} element={<System />} >
+          <Route path={path.CREATE_POST} element={<CreatePost />} />
+          <Route path={path.MANAGE_POST} element={<ManagePost />} />
+          <Route path={path.USER_PROFILE} element={<UserProfile />} />
+        </Route>
       </Routes>
       {/* app */}
+       <ToastContainer position="top-right" autoClose={3000} />
 
     </div>
   );

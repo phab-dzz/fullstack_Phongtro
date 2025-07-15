@@ -64,3 +64,15 @@ export const apiGetPublicDistrict = (provinceId) => new Promise(async (resolve, 
         reject(error)
     }
 })
+export const apiGetPublicWard = (wardId) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosDefault({
+            method: 'get',
+            url: `https://api.vnappmob.com/api/v2/province/ward/${wardId}`,
+        })
+        resolve(response)
+
+    } catch (error) {
+        reject(error)
+    }
+})

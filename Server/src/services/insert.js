@@ -7,6 +7,7 @@ import nhachothue from '../../data/nhachothue.json'
 import chothuephongtro from '../../data/chothuephongtro.json'
 import generateCode from '../utils/generateCode'
 import { dataPrice, dataArea } from '../utils/data'
+import generateDate from '../utils/generateDate'
 import { getNumberFromString, getNumberFromStringV2 } from '../utils/common'
 require('dotenv').config()
 const dataBody = [
@@ -54,6 +55,7 @@ export const insertService = () => new Promise(async (resolve, reject) => {
                 let userId = v4()
                 let imagesId = v4()
                 let overviewId = v4()
+                const  currentDate = generateDate()
                 let desc = JSON.stringify(item?.mainContent?.content)
                 let currentArea = getNumberFromString(item?.header?.attributes?.acreage)
                 let currentPrice = getNumberFromString(item?.header?.attributes?.price)
@@ -104,8 +106,8 @@ export const insertService = () => new Promise(async (resolve, reject) => {
                     type: item?.overview?.content.find(i => i.name === "Loại tin rao:")?.content,
                     target: item?.overview?.content.find(i => i.name === "Đối tượng thuê:")?.content,
                     bonus: item?.overview?.content.find(i => i.name === "Gói tin:")?.content,
-                    created: item?.overview?.content.find(i => i.name === "Ngày đăng:")?.content,
-                    expired: item?.overview?.content.find(i => i.name === "Ngày hết hạn:",)?.content,
+                    created: currentDate.today,
+                    expired: currentDate.dateExpire,
                 })
                 await db.User.create({
                     id: userId,

@@ -2,7 +2,7 @@ import icons from './icons'
 
 const { ImPencil2, MdOutlineLibraryBooks, BiUserPin } = icons
 
-const menuManage = [
+const memuSidebar = [
     {
         id: 1,
         text: 'Đăng tin cho thuê',
@@ -17,10 +17,16 @@ const menuManage = [
     },
     {
         id: 4,
-        text: 'Thông tin tài khoản',
+        text: 'Sửa thông tin cá nhân',
         path: '/he-thong/thong-tin-ca-nhan',
+        icon: <BiUserPin />
+    },
+    {
+        id: 5,
+        text: 'Liên hệ',
+        path: '/he-thong/lien-he',
         icon: <BiUserPin />
     }
 ]
 
-export default menuManage
+export default memuSidebar

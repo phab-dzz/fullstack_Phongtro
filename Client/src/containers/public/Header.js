@@ -24,6 +24,19 @@ const Header = () => {
     useEffect(() => {
         headerRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
     }, [searchParams.get('page')])
+    // useEffect(()=>{
+    //     if
+
+    // },[isLoggedIn])
+    const gocreatePost = useCallback(() => {
+        if (!isLoggedIn) {
+            goLogin(false)
+            
+        }
+        else {
+            navigate('he-thong/tao-moi-bai-dang')
+        }
+    }, [isLoggedIn])
 
     return (
         <div ref={headerRef} className='w-3/5 '>
@@ -91,6 +104,7 @@ const Header = () => {
                         textColor='text-white'
                         bgColor='bg-secondary2'
                         IcAfter={AiOutlinePlusCircle}
+                        onClick={gocreatePost}
                     />
                 </div>
             </div>

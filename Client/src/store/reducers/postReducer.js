@@ -4,7 +4,9 @@ const initState = {
     msg: '',
     count: 0,
     newPosts: [],
-    postById: {}
+    postById: {},
+    postOfCurrent: [], 
+    
 
 }
 
@@ -33,7 +35,19 @@ const postReducer = (state = initState, action) => {
                 postById: action.post || {},
                 msg: action.msg || ''
             }
-
+        case actionTypes.GET_POST_OF_CURRENT:
+            return {
+                ...state,
+                postOfCurrent: action.postOfCurrent || [],
+                msg: action.msg || ''
+            }
+        case actionTypes.GET_POSTS_CREATED:
+            return {
+                ...state,
+                
+                msg: action.msg || ''
+            }
+            
 
         default:
             return state;

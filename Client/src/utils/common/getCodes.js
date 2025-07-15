@@ -28,11 +28,23 @@ export const getCodeArea = (totals) => {
     })
 }
 
+// export const getCodes = (arrMinMax, prices) => {
+//     const pricesWithMinMax = getCodePrice(prices)
+//     return pricesWithMinMax.filter(item => (item.min >= arrMinMax[0] && item.min <= arrMinMax[1]) || (item.max >= arrMinMax[0] && item.max <= arrMinMax[1]))
+// }
+// export const getCodesArea = (arrMinMax, areas) => {
+//     const areasWithMinMax = getCodeArea(areas)
+//     return areasWithMinMax.filter(item => (item.min >= arrMinMax[0] && item.min <= arrMinMax[1]) || (item.max >= arrMinMax[0] && item.max <= arrMinMax[1]))
+// }
 export const getCodes = (arrMinMax, prices) => {
     const pricesWithMinMax = getCodePrice(prices)
-    return pricesWithMinMax.filter(item => (item.min >= arrMinMax[0] && item.min <= arrMinMax[1]) || (item.max >= arrMinMax[0] && item.max <= arrMinMax[1]))
+    return pricesWithMinMax.find(item => (
+        arrMinMax[0] >= item.min && arrMinMax[1] <= item.max
+    ))?.code || null
 }
 export const getCodesArea = (arrMinMax, areas) => {
     const areasWithMinMax = getCodeArea(areas)
-    return areasWithMinMax.filter(item => (item.min >= arrMinMax[0] && item.min <= arrMinMax[1]) || (item.max >= arrMinMax[0] && item.max <= arrMinMax[1]))
+    return areasWithMinMax.find(item => (
+        arrMinMax[0] >= item.min && arrMinMax[1] <= item.max
+    ))?.code || null
 }
