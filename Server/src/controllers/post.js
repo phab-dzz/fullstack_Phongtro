@@ -125,3 +125,25 @@ export const getdeletePostbyuserId = async (req, res) => {
         })
     }
 }
+export const updatepostByadmin= async (req, res) => {
+    const { id } = req.user;
+    const { postId } = req.params;
+    const data = req.body;
+    console.log("Id from update post by admin", id)
+    try {
+        if (!id) {
+            return res.status(400).json({
+                err: -1,
+                msg: 'missing user id'
+            })
+        }
+        const response = await postService.updatePostServicebyadmin(data, postId);
+        return res.status(200).json(response)
+    }
+    catch (error) {
+        return res.status(500).json({
+            err: -1,
+            msg: 'fail in controller' + error
+        })
+    }
+}

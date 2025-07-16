@@ -244,3 +244,19 @@ export const deletePostService = (postId,id) => new Promise(async (resolve, reje
         reject(error)
     }
 })
+export const updatePostServicebyadmin = (data, id) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await db.Post.update(data, {
+            where: { id }
+        })
+        resolve({
+            err: response ? 0 : 1,
+            msg: response ? 'Update post successfully' : 'Failed to update post',
+            response
+        })
+
+    } catch (error) {
+        reject(error)
+    }
+}
+)

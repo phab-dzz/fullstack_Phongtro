@@ -1,7 +1,7 @@
 import React,{useState} from "react";
 import { useSelector,useDispatch } from "react-redux";
 import moment from "moment";
-import {Button,ModalConfirm} from "../../components";
+import {Button,ModalConfirm,ModalPost} from "../../components";
 import {apiDeletePost}from "../../services/post";
 import {toast} from "react-toastify";
 
@@ -21,6 +21,17 @@ const ManagePost = () => {
     setSelectedPost(post);
     setShowModal(true);
   };
+  const openPostDetail= (post) => {
+    setCurrentItem(post);
+    setIsModalOpen(true);
+  };
+    const handleSave = (updatedItem) => {
+    console.log('Saved item:', updatedItem);
+    // Xử lý lưu dữ liệu ở đây
+    setIsModalOpen(false);
+  };
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentItem, setCurrentItem] = useState(null);
   const checkStatus = (date) => moment(date,process.env.REACT_APP_FORMAT_DATE).isSameOrAfter(new Date().toDateString())
   console.log("post of admin :"+postOfCurrent);
   const handleConfirmDelete = async () => {
@@ -85,12 +96,13 @@ const ManagePost = () => {
                       <td className="py-2 border text-center">
                        {checkStatus(item?.overviews?.expired?.split(' ')[3])?'Đang hoạt động' : 'Đã hết hạn'}
                       </td>
-                      <td className="border text-center p-2 flex items-center gap-2 justify-between">
+                      <td className="flex items-center gap-2 justify-between p-4">
                        
                         <Button
-                        text="sửa"
+                        text="Chi tiết"
                         bgColor={'bg-green-600'} 
                         textColor={'text-white'}
+                        onClick={() =>  openPostDetail(item)}
                     
                         />
                         <Button
@@ -114,6 +126,12 @@ const ManagePost = () => {
         onClose={() => setShowModal(false)}
         onConfirm={handleConfirmDelete}
         postTitle={selectedPost?.title || ''}
+      />
+       <ModalPost
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        item={currentItem}
+        onSave={handleSave}
       />
       </div>
 
