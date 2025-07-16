@@ -36,6 +36,7 @@ export const loginService = ({ phone, password }) => new Promise(async (resolve,
             raw: true
         })
         const isCorrectPassword = response && bcrypt.compareSync(password, response.password)
+        console.log("isCorrectPassword", isCorrectPassword)
         const token = isCorrectPassword && jwt.sign({ id: response.id, phone: response.phone }, process.env.SECRET_KEY, { expiresIn: '2d' })
         resolve({
             err: token ? 0 : 2,
@@ -47,3 +48,20 @@ export const loginService = ({ phone, password }) => new Promise(async (resolve,
         reject(error)
     }
 })
+export const changePasswordService = ({ phone, password, newPassword }) => new Promise(async (resolve, reject) => {
+    try {
+        const user = await db.User.findOne({ where: { phone } });
+        if (!user) {
+            return resolve({ err: 1, msg: 'User not found' });
+        }
+        const isCorrectPassword = bcrypt.compareSync(password, user.password);
+        if (!isCorrectPassword) {
+            return resolve({ err: 2, msg: 'Current password is incorrect' });
+        }
+        user.password = hashPassword(newPassword);
+        await user.save();
+        resolve({ err: 0, msg: 'Password changed successfully' });
+    } catch (error) {
+        reject(error);
+    }
+});

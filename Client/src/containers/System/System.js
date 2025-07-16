@@ -10,16 +10,21 @@ const System = () => {
         return <Navigate to={path.HOME} replace={true} />;
     }
     return (
-        <div className="w-full h-screen flex flex-col items-center">
-            <Header />
+        <>
+        <Header />
+          <div className="w-full h-screen flex flex-col items-center pt-[40px]">
+          
             <div className="w-full flex flex-auto">
                 <Sidebar />
-                <div className="flex-auto bg-white shadow-md  shadow-md h-full p-4">
+                <div className="flex-auto bg-white shadow-md min-h-screen p-4">
                     <Outlet />
                 </div>
             </div>
            
         </div>
+    
+        </>
     );
+
 }
 export default System;

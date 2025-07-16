@@ -103,3 +103,15 @@ export const apiDeletePost = (postId) => new Promise(async (resolve, reject) => 
         reject(error)
     }
 })
+export const apiUpdatePostByAdmin = (data, id) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'put',
+            url: `/api/v1/post/update/${id}`,
+            data: data
+        })
+        resolve(response)
+    } catch (error) {
+        reject(error)
+    }
+})

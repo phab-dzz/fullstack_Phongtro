@@ -21,12 +21,12 @@ const memuSidebar = [
         path: '/he-thong/thong-tin-ca-nhan',
         icon: <BiUserPin />
     },
-    {
-        id: 5,
-        text: 'Liên hệ',
-        path: '/he-thong/lien-he',
-        icon: <BiUserPin />
-    }
+    // {
+    //     id: 5,
+    //     text: 'Liên hệ',
+    //     path: '/he-thong/lien-he',
+    //     icon: <BiUserPin />
+    // }
 ]
 
 export default memuSidebar

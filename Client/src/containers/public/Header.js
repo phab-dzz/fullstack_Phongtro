@@ -40,7 +40,7 @@ const Header = () => {
 
     return (
         <div ref={headerRef} className='w-3/5 '>
-            <div className='w-full flex items-center justify-between'>
+            <div className='w-full flex items-center justify-between '>
                 <Link to={'/'} >
                     <img
                         src={logo}

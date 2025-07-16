@@ -4,3 +4,6 @@ export { default as System } from "./System";
 export { default as CreatePost } from "./CreatePost";
 export { default as ManagePost } from "./ManagePost";
 export { default as UserProfile } from "./UserProfile";
+export { default as UserInfo } from "./UserInfo";
+export { default as ChangePassword } from "./ChangePassword";
+

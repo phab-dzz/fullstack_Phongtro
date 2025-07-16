@@ -155,8 +155,9 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
                 <input
                   type="text"
                   value={formData.code}
+                  readOnly
                   onChange={(e) => handleInputChange('code', e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2  rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Nhập mã code"
                 />
               ) : (
@@ -222,7 +223,7 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
               </label>
             </div>
            
-            <div className="">
+            <div className="w-full">
               
               {isEditing ? (
                 <input
@@ -245,8 +246,8 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
               Mô tả
               </label>
             </div>
-           
-            <div className="">
+
+            <div className="w-full">
 
               {isEditing ? (
                 <input
@@ -269,7 +270,7 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
               Địa chỉ
               </label>
             </div>
-            <div className="">
+            <div className="w-full">
               {isEditing ? (
                 <input
 
@@ -295,7 +296,7 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
                 giá
               </label>
             </div>
-            <div className="">
+            <div className="w-full">
              
               {isEditing ? (
                 <input

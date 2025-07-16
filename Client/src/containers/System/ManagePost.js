@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import { useSelector,useDispatch } from "react-redux";
 import moment from "moment";
 import {Button,ModalConfirm,ModalPost} from "../../components";
-import {apiDeletePost}from "../../services/post";
+import {apiDeletePost,apiUpdatePostByAdmin}from "../../services/post";
 import {toast} from "react-toastify";
 
 import * as actions from '../../store/actions';
@@ -25,9 +25,15 @@ const ManagePost = () => {
     setCurrentItem(post);
     setIsModalOpen(true);
   };
-    const handleSave = (updatedItem) => {
+    const handleSave = async (updatedItem) => {
     console.log('Saved item:', updatedItem);
-    // Xử lý lưu dữ liệu ở đây
+    const response = await apiUpdatePostByAdmin(updatedItem, updatedItem.id);
+    if (response?.data?.err === 0) {
+      toast.success("📝 Cập nhật thành công!");
+      dispatch(actions.getPostOfCurrent());
+    } else {
+      toast.error(response?.data?.msg || "Cập nhật thất bại");
+    }
     setIsModalOpen(false);
   };
   const [isModalOpen, setIsModalOpen] = useState(false);
