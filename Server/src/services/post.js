@@ -3,6 +3,7 @@ import db from "../models";
 import { v4 } from 'uuid'
 import generateCode from "../utils/generateCode";
 import generateDate from "../utils/generateDate";
+import { Op } from "sequelize";
 
 export const getPostService = () => new Promise(async (resolve, reject) => {
     try {
@@ -35,43 +36,44 @@ export const getPostService = () => new Promise(async (resolve, reject) => {
 )
 
 
-export const getPostLimitService = (page, query,{priceNumber, areaNumber}) => new Promise(async (resolve, reject) => {
-    try {
-        let offset = (!page || +page <= 1) ? 0 : (+page - 1)
-const queries = {...query}
- if (priceNumber) queries.priceNumber = { [Op.between]: priceNumber }
-        if (areaNumber) queries.areaNumber = { [Op.between]: areaNumber }
-        const response = await db.Post.findAndCountAll(
-            {
-                where: queries,
-                raw: true,
-                nest: true,// gộp lại thành object
-                offset: offset * +process.env.LIMIT,
-                limit: +process.env.LIMIT,
+// export const getPostLimitService = (page, query,{priceNumber, areaNumber}) => new Promise(async (resolve, reject) => {
+//     try {
+//         let offset = (!page || +page <= 1) ? 0 : (+page - 1)
+// const queries = {...query}
+//  if (priceNumber) queries.priceNumber = { [Op.between]: priceNumber }
+//         if (areaNumber) queries.areaNumber = { [Op.between]: areaNumber }
+        
+//         const response = await db.Post.findAndCountAll(
+//             {
+//                 where: queries,
+//                 raw: true,
+//                 nest: true,// gộp lại thành object
+//                 offset: offset * +process.env.LIMIT,
+//                 limit: +process.env.LIMIT,
 
-                include: [
-                    { model: db.Image, as: 'images', attributes: ['image'] },
-                    { model: db.Attribute, as: 'attributes', attributes: ['price', 'acreage', 'published', 'hashtag'] },
-                    { model: db.User, as: 'user', attributes: ['name', 'zalo', 'phone','avatar'] },
-                ],
-                attributes: ['id', 'title', 'star', 'address', 'description',]
-            }
-            //     attributes: ['id', 'title','star', 'content', 'createdAt', 'updatedAt'],
-            // }
-        )
-        // console.log(response)
-        resolve({
-            err: response ? 0 : 1,
-            msg: response ? 'OK' : 'fail',
-            response: response
+//                 include: [
+//                     { model: db.Image, as: 'images', attributes: ['image'] },
+//                     { model: db.Attribute, as: 'attributes', attributes: ['price', 'acreage', 'published', 'hashtag'] },
+//                     { model: db.User, as: 'user', attributes: ['name', 'zalo', 'phone','avatar'] },
+//                 ],
+//                 attributes: ['id', 'title', 'star', 'address', 'description',]
+//             }
+//             //     attributes: ['id', 'title','star', 'content', 'createdAt', 'updatedAt'],
+//             // }
+//         )
+//         // console.log(response)
+//         resolve({
+//             err: response ? 0 : 1,
+//             msg: response ? 'OK' : 'fail',
+//             response: response
 
-        })
-    } catch (error) {
+//         })
+//     } catch (error) {
 
-        reject(error)
-    }
-}
-)
+//         reject(error)
+//     }
+// }
+// )
 export const getNewPostsService = () => new Promise(async (resolve, reject) => {
     try{
         const response = await db.Post.findAll(
@@ -260,3 +262,119 @@ export const updatePostServicebyadmin = (data, id) => new Promise(async (resolve
     }
 }
 )
+export const searchPostService = (query) => new Promise(async (resolve, reject) => {
+    try {
+        const { find, provinceCode } = query;
+
+        // Xây dựng điều kiện where động
+        let wherePost = {};
+        if (find) {
+            wherePost[Op.or] = [
+                { title: { [Op.like]: `%${find}%` } },
+                { address: { [Op.like]: `%${find}%` } },
+            ];
+        }
+        if (provinceCode) {
+            wherePost.provinceCode = provinceCode;
+        }
+
+        const response = await db.Post.findAll({
+            where: Object.keys(wherePost).length > 0 ? wherePost : undefined,
+            raw: true,
+            nest: true,
+            include: [
+                {
+                    model: db.Image,
+                    as: 'images',
+                    attributes: ['image'],
+                },
+                {
+                    model: db.Attribute,
+                    as: 'attributes',
+                    attributes: ['price', 'acreage', 'published', 'hashtag'],
+                    
+                },
+                {
+                    model: db.User,
+                    as: 'user',
+                    attributes: ['name', 'zalo', 'phone', 'avatar'],
+                },
+            ],
+            attributes: ['id', 'title', 'star', 'address', 'description', 'provinceCode'],
+        });
+
+        resolve({
+            err: 0,
+            msg: 'OK',
+            count: response.length,
+            response: response,
+            
+        });
+
+    } catch (error) {
+        console.log(error);
+        reject(error);
+    }
+});
+export const getPostLimitService = (page, query, { priceNumber, areaNumber }) => new Promise(async (resolve, reject) => {
+    try {
+        // Xử lý phân trang
+        const limit = +process.env.LIMIT || 10;
+        const offset = (!page || +page <= 1) ? 0 : (+page - 1) * limit;
+
+        const { search, ...restQuery } = query;
+
+        // Khởi tạo điều kiện where
+        const queries = { ...restQuery };
+
+        // Lọc theo khoảng giá
+        if (priceNumber) queries.priceNumber = { [Op.between]: priceNumber };
+
+        // Lọc theo diện tích
+        if (areaNumber) queries.areaNumber = { [Op.between]: areaNumber };
+
+        // Lọc theo từ khóa (title, address)
+        if (search) {
+            queries[Op.or] = [
+                { title: { [Op.like]: `%${search}%` } },
+                { address: { [Op.like]: `%${search}%` } },
+            ];
+        }
+
+        const response = await db.Post.findAndCountAll({
+            where: queries,
+            raw: true,
+            nest: true,
+            offset,
+            limit,
+            include: [
+                {
+                    model: db.Image,
+                    as: 'images',
+                    attributes: ['image'],
+                },
+                {
+                    model: db.Attribute,
+                    as: 'attributes',
+                    attributes: ['price', 'acreage', 'published', 'hashtag'],
+                },
+                {
+                    model: db.User,
+                    as: 'user',
+                    attributes: ['name', 'zalo', 'phone', 'avatar'],
+                },
+            ],
+            attributes: ['id', 'title', 'star', 'address', 'description'],
+        });
+
+        resolve({
+            err: 0,
+            msg: 'OK',
+            response
+        });
+
+    } catch (error) {
+        console.log(error);
+        reject(error);
+    }
+});

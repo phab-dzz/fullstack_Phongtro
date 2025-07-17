@@ -1,5 +1,5 @@
 import actionTypes from './actionTypes';
-import { apiGetPost, apiGetPostLimit,apiGetNewPosts,apiGetPostById,apiGetPostOfCurrent,apiCreatePost } from '../../services/post';
+import { apiGetPost, apiGetPostLimit,apiGetNewPosts,apiGetPostById,apiGetPostOfCurrent,apiCreatePost,apiGetPostsearch } from '../../services/post';
 export const getPosts = () => async (dispatch) => {
     try {
         const response = await apiGetPost()
@@ -134,6 +134,28 @@ export const createPost = (payload) => async (dispatch) => {
         dispatch({
             type: actionTypes.GET_POSTS_CREATED,
             post: null
+        })
+    }
+}
+export const gePostSearch= (query) => async (dispatch) => {
+    try {
+        const response = await apiGetPostsearch(query)
+        if (response?.data.err === 0) {
+            dispatch({
+                type: actionTypes.GET_POSTS_SEARCH,
+                postSearch: response.data.response
+            })
+        } else {
+            dispatch({
+                type: actionTypes.GET_POSTS_SEARCH,
+                msg: response.data.msg,
+                postSearch: []
+            })
+        }
+    } catch (error) {
+        dispatch({
+            type: actionTypes.GET_POSTS_SEARCH,
+            postSearch: []
         })
     }
 }

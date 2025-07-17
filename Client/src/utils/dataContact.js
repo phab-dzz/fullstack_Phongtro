@@ -1,5 +1,5 @@
 export const text = {
-    image: 'https://phongtro123.com/images/support-bg.jpg',
+    image: 'https://PhongTro123.com/images/support-bg.jpg',
     content: 'Liên hệ với chúng tôi nếu bạn cần hỗ trợ:',
     contacts: [
         {

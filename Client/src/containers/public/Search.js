@@ -16,6 +16,7 @@ const Search = () => {
     const {provinces,areas,prices,categories} = useSelector(state => state.app);
 
 const [queries,setQueries] = useState({})
+const [searchText, setSearchText] = useState('')
 
     const [arrMinMax, setArrMinMax] = useState({})
     const [defaultText, setDefaultText] = useState('')
@@ -24,6 +25,7 @@ const [queries,setQueries] = useState({})
         if(!location?.pathname.includes(path.SEARCH)) {
             setArrMinMax({})
             setQueries({})
+            setSearchText('')
         }
     }
     , [location])
@@ -39,6 +41,7 @@ const [queries,setQueries] = useState({})
         setIsShowModal(false)
         arrMaxMin && setArrMinMax(prev => ({ ...prev, ...arrMaxMin }))
     }, [isShowModal, queries])
+    
     const handleSearch = () => {
         const queryCodes = Object.entries(queries).filter(item => item[0].includes('Number') || item[0].includes('Code')).filter(item => item[1])
         let queryCodesObj = {}
@@ -46,14 +49,18 @@ const [queries,setQueries] = useState({})
         const queryText = Object.entries(queries).filter(item => !item[0].includes('Code') || !item[0].includes('Number'))
         let queryTextObj = {}
         queryText.forEach(item => { queryTextObj[item[0]] = item[1] })
+        
+        // Thêm searchText vào queryCodesObj
+        if (searchText) {
+            queryCodesObj.search = searchText
+        }
+        
         let titleSearch = `${queryTextObj.category
             ? queryTextObj.category
             : 'Cho thuê tất cả'} ${queryTextObj.province
                 ? `tỉnh ${queryTextObj.province}`
-                : ''} ${queryTextObj.price
-                    ? `giá ${queryTextObj.price}`
-                    : ''} ${queryTextObj.area
-                        ? `diện tích ${queryTextObj.area}` : ''} `
+                : ''} ${searchText ? `"${searchText}"` : ''}`
+        
         navigate({
             pathname: path.SEARCH,
             search: createSearchParams(queryCodesObj).toString(),
@@ -69,16 +76,17 @@ const [queries,setQueries] = useState({})
                 <span onClick={() => handleShowModal(provinces, 'province', 'Toàn quốc')} className='cursor-pointer flex-1'>
                     <SearchItem IconBefore={<HiOutlineLocationMarker />} IconAfter={<BsChevronRight color='rgb(156, 163, 175)' />} text={queries.province} defaultText={'Toàn quốc'} />
                 </span>
-                <span onClick={() => handleShowModal(prices, 'price', 'Chọn giá')} className='cursor-pointer flex-1'>
-                    <SearchItem IconBefore={<TbReportMoney />} IconAfter={<BsChevronRight color='rgb(156, 163, 175)' />} text={queries.price} defaultText={'Chọn giá'} />
-                </span>
-                <span onClick={() => handleShowModal(areas, 'area', 'Chọn diện tích')} className='cursor-pointer flex-1'>
-                    <SearchItem IconBefore={<RiCrop2Line />} IconAfter={<BsChevronRight color='rgb(156, 163, 175)' />} text={queries.area} defaultText={'Chọn diện tích'} />
-                </span>
+                <input
+                    type="text"
+                    value={searchText}
+                    onChange={(e) => setSearchText(e.target.value)}
+                    placeholder="Nhập từ khóa tìm kiếm..."
+                    className="flex-1 px-3 py-2 border border-gray-300 rounded-md outline-none focus:border-blue-500 h-[36px]"
+                />
                 <button
                     type='button'
                     onClick={handleSearch}
-                    className='outline-none py-2 px-4 flex-1 bg-secondary1 text-[13.3px] flex items-center justify-center gap-2 text-white font-medium'
+                    className='outline-none py-2 px-4 flex-1 bg-secondary1 text-[13.3px] flex items-center justify-center gap-2 text-white font-medium h-[36px] rounded-md w-[120px] flex-shrink-0'
                 >
                     <FiSearch />
                     Tìm kiếm

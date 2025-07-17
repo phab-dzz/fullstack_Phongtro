@@ -5,7 +5,8 @@ const initState = {
     count: 0,
     newPosts: [],
     postById: {},
-    postOfCurrent: [], 
+    postOfCurrent: [],
+    postSearch: [],
     
 
 }
@@ -45,6 +46,12 @@ const postReducer = (state = initState, action) => {
             return {
                 ...state,
                 
+                msg: action.msg || ''
+            }
+        case actionTypes.GET_POSTS_SEARCH:
+            return {
+                ...state,
+                postSearch: action.postSearch || [],
                 msg: action.msg || ''
             }
             

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { X, Edit2, Save, Calendar, DollarSign, FileText, Image, Hash, Dessert ,Locate,} from 'lucide-react';
+import { X, Edit2, Save, Calendar, DollarSign, FileText, Image, Hash, Locate, Upload, Trash2 } from 'lucide-react';
+import { apiUploadImages } from '../services'
 
 const ModalPost = ({ isOpen, onClose, item, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [imagesPreview, setImagesPreview] = useState([]);
   const [formData, setFormData] = useState({
     code: '',
     title: '',
@@ -16,16 +19,20 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
 
   useEffect(() => {
     if (item) {
+      const itemImages = item?.images?.image ? 
+        (typeof item.images.image === 'string' ? JSON.parse(item.images.image) : item.images.image) : [];
+      
       setFormData({
         code: item?.overviews?.code || '',
         title: item?.title || '',
         price: item?.attributes?.price || '',
         created: item?.overviews?.created || '',
         expired: item?.overviews?.expired || '',
-        images: item?.images?.image ? JSON.parse(item.images.image) : [],
+        images: itemImages,
         description: item?.description || '',
         address: item?.address || ''
       });
+      setImagesPreview(itemImages);
     }
   }, [item]);
 
@@ -43,27 +50,43 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
     }));
   };
 
-  const handleImageChange = (index, value) => {
-    const newImages = [...formData.images];
-    newImages[index] = value;
-    setFormData(prev => ({
-      ...prev,
-      images: newImages
+  const handleFiles = async (e) => {
+    e.stopPropagation();
+    setIsLoading(true);
+    let images = [];
+    let files = e.target.files;
+    
+    for (let i of files) {
+      let formDataUpload = new FormData();
+      formDataUpload.append('file', i);
+      formDataUpload.append('upload_preset', process.env.REACT_APP_UPLOAD_ASSETS_NAME);
+      
+      try {
+        let response = await apiUploadImages(formDataUpload);
+        if (response.status === 200) {
+          images = [...images, response.data?.secure_url];
+        }
+      } catch (error) {
+        console.error('Upload failed:', error);
+      }
+    }
+    
+    setIsLoading(false);
+    console.log("Images uploaded:", images);
+    setImagesPreview(prev => [...prev, ...images]);
+    console.log("Images uploaded:", imagesPreview);
+
+    setFormData(prev => ({ 
+      ...prev, 
+      images: [...prev.images, ...images] 
     }));
   };
 
-  const addImageUrl = () => {
+  const handleDeleteImage = (image) => {
+    setImagesPreview(prev => prev?.filter(item => item !== image));
     setFormData(prev => ({
       ...prev,
-      images: [...prev.images, '']
-    }));
-  };
-
-  const removeImageUrl = (index) => {
-    const newImages = formData.images.filter((_, i) => i !== index);
-    setFormData(prev => ({
-      ...prev,
-      images: newImages
+      images: prev.images?.filter(item => item !== image)
     }));
   };
 
@@ -83,7 +106,7 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
       },
       images: {
         ...item.images,
-        image: JSON.stringify(formData.images.filter(img => img.trim() !== ''))
+        image: formData.images.filter(img => img.trim() !== '')
       },
       description: formData.description,
       address: formData.address || item.address
@@ -94,17 +117,20 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
   };
 
   const handleCancel = () => {
-    // Reset form data to original values
+    const itemImages = item?.images?.image ? 
+      (typeof item.images.image === 'string' ? JSON.parse(item.images.image) : item.images.image) : [];
+    
     setFormData({
       code: item?.overviews?.code || '',
       title: item?.title || '',
       price: item?.attributes?.price || '',
       created: item?.overviews?.created || '',
       expired: item?.overviews?.expired || '',
-      images: item?.images?.image ? JSON.parse(item.images.image) : [],
+      images: itemImages,
       description: item?.description || '',
       address: item?.address || ''
     });
+    setImagesPreview(itemImages);
     setIsEditing(false);
   };
 
@@ -114,7 +140,7 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-lg overflow-auto hide-scrollbar">
+      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-lg">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
           <h2 className="text-2xl text-center font-semibold text-gray-800">
@@ -142,22 +168,20 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
         {/* Content */}
         <div className="p-6 space-y-6">
           {/* Code */}
-          <div className="flex  flex-col items-start gap-3">
+          <div className="flex flex-col items-start gap-3">
             <div className='flex items-center gap-2'>
               <Hash className="text-gray-500" size={12} />
- <label className="block text-sm font-medium text-gray-700 mb-1">
+              <label className="block text-sm font-medium text-gray-700 mb-1">
                 Mã code
               </label>
             </div>
-            <div className="mt-2">
-             
+            <div className="w-full">
               {isEditing ? (
                 <input
                   type="text"
                   value={formData.code}
                   readOnly
-                  onChange={(e) => handleInputChange('code', e.target.value)}
-                  className="w-full px-3 py-2  rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none cursor-not-allowed"
                   placeholder="Nhập mã code"
                 />
               ) : (
@@ -166,7 +190,7 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
             </div>
           </div>
 
-          {/* Image */}
+          {/* Image Upload */}
           <div className="flex items-start gap-3">
             <Image className="text-gray-500 mt-1" size={12} />
             <div className="flex-1">
@@ -174,34 +198,56 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
                 Hình ảnh
               </label>
               {isEditing ? (
-                <div className="space-y-2">
-                  {formData.images.map((img, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <input
-                        type="url"
-                        value={img}
-                        onChange={(e) => handleImageChange(index, e.target.value)}
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder="URL hình ảnh"
-                      />
-                      <button
-                        onClick={() => removeImageUrl(index)}
-                        className="px-3 py-2 text-red-500 hover:bg-red-50 rounded-lg transition-colors"
-                      >
-                        <X size={16} />
-                      </button>
+                <div className="space-y-4">
+                  {/* Upload Button */}
+                  <div className="relative">
+                    <input
+                      type="file"
+                      multiple
+                      accept="image/*"
+                      onChange={handleFiles}
+                      className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                      disabled={isLoading}
+                    />
+                    <div className="flex items-center justify-center w-full h-32 border-2 border-dashed border-gray-300 rounded-lg hover:border-gray-400 transition-colors">
+                      {isLoading ? (
+                        <div className="flex items-center gap-2 text-gray-500">
+                          <div className="w-4 h-4 border-2 border-gray-300 border-t-blue-500 rounded-full animate-spin"></div>
+                          Đang tải lên...
+                        </div>
+                      ) : (
+                        <div className="flex flex-col items-center gap-2 text-gray-500">
+                          <Upload size={24} />
+                          <span className="text-sm">Nhấp để tải lên hình ảnh</span>
+                        </div>
+                      )}
                     </div>
-                  ))}
-                  <button
-                    onClick={addImageUrl}
-                    className="px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors text-sm"
-                  >
-                    Thêm hình ảnh
-                  </button>
+                  </div>
+
+                  {/* Image Preview */}
+                  {imagesPreview.length > 0 && (
+                    <div className="grid grid-cols-3 gap-2">
+                      {imagesPreview.map((img, index) => (
+                        <div key={index} className="relative group">
+                          <img
+                            src={img}
+                            alt={`Preview ${index + 1}`}
+                            className="w-full h-20 object-cover rounded-lg border"
+                          />
+                          <button
+                            onClick={() => handleDeleteImage(img)}
+                            className="absolute top-1 right-1 p-1 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-600"
+                          >
+                            <Trash2 size={12} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="flex gap-2 flex-wrap">
-                  {formData.images.map((img, index) => (
+                  {imagesPreview.map((img, index) => (
                     <img
                       key={index}
                       src={img}
@@ -217,14 +263,12 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
           {/* Title */}
           <div className="flex flex-col items-start gap-3">
             <div className='flex items-center gap-2'>
-             <FileText className="text-gray-500" size={12} />
- <label className="block text-sm font-medium text-gray-700 mb-1">
-              Tiêu đề
+              <FileText className="text-gray-500" size={12} />
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Tiêu đề
               </label>
             </div>
-           
             <div className="w-full">
-              
               {isEditing ? (
                 <input
                   type="text"
@@ -238,22 +282,21 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
               )}
             </div>
           </div>
-          {/* description */}
-           <div className="flex flex-col items-start gap-3">
+
+          {/* Description */}
+          <div className="flex flex-col items-start gap-3">
             <div className='flex items-center gap-2'>
-             <FileText className="text-gray-500" size={12} />
- <label className="block text-sm font-medium text-gray-700 mb-1">
-              Mô tả
+              <FileText className="text-gray-500" size={12} />
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Mô tả
               </label>
             </div>
-
             <div className="w-full">
-
               {isEditing ? (
-                <input
-                  type="text"
+                <textarea
                   value={formData.description}
                   onChange={(e) => handleInputChange('description', e.target.value)}
+                  rows={3}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Nhập mô tả"
                 />
@@ -262,42 +305,39 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
               )}
             </div>
           </div>
+
           {/* Address */}
           <div className="flex flex-col items-start gap-3">
             <div className='flex items-center gap-2'>
-             <Locate className="text-gray-500" size={12} />
- <label className="block text-sm font-medium text-gray-700 mb-1">
-              Địa chỉ
+              <Locate className="text-gray-500" size={12} />
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Địa chỉ
               </label>
             </div>
             <div className="w-full">
               {isEditing ? (
                 <input
-
                   type="text"
                   value={formData.address}
                   onChange={(e) => handleInputChange('address', e.target.value)}
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                   placeholder="Nhập địa chỉ"
-                />    
+                />
               ) : (
                 <p className="text-gray-800 bg-gray-50 px-3 py-2 rounded-lg">{formData.address}</p>
               )}
             </div>
           </div>
 
-
           {/* Price */}
-          <div className="flex flex-col items-start  gap-3">
-            
+          <div className="flex flex-col items-start gap-3">
             <div className='flex items-center gap-2'>
-             <DollarSign className="text-gray-500" size={12} />
- <label className="block text-sm font-medium text-gray-700 mb-1">
-                giá
+              <DollarSign className="text-gray-500" size={12} />
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Giá
               </label>
             </div>
             <div className="w-full">
-             
               {isEditing ? (
                 <input
                   type="text"
@@ -384,6 +424,7 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
             <button
               onClick={handleSave}
               className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors"
+              disabled={isLoading}
             >
               <Save size={16} />
               Lưu thay đổi

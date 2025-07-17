@@ -115,3 +115,16 @@ export const apiUpdatePostByAdmin = (data, id) => new Promise(async (resolve, re
         reject(error)
     }
 })
+export const apiGetPostsearch = (query) => new Promise(async (resolve, reject) => {
+    try {
+        const response = await axiosConfig({
+            method: 'get',
+            url: `/api/v1/post/search`,
+            params: query
+        })
+        resolve(response)
+
+    } catch (error) {
+        reject(error)
+    }
+})

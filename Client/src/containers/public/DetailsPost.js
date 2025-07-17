@@ -70,7 +70,7 @@ const removeHouseNumberAdvanced = (address) => {
         </div>
     );
     return (
-        <div className='w-full max-w-7xl mx-auto px-4 py-6'>
+        <div className='w-full max-w-8xl mx-auto px-4 py-6'>
             {/* Header */}
             <div className="mb-6">
                 <div className="flex items-center justify-between mb-4">
@@ -263,10 +263,9 @@ const removeHouseNumberAdvanced = (address) => {
                     </div>
 
                     {/* Related Posts */}
-                    <div className='bg-white rounded-2xl shadow-lg p-6'>
-                        <h3 className='text-lg font-semibold text-gray-900 mb-4'>Tin đăng liên quan</h3>
+                  
                         <RelatedPost />
-                    </div>
+                    
                 </div>
             </div>
         </div>

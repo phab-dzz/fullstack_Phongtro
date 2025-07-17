@@ -6,6 +6,7 @@ router.get('/all', postController.getPosts);
 router.get('/limit', postController.getPostLimit);
 router.get('/new-post', postController.getNewPosts);
 router.get('/postbyid/:id', postController.getPostById);
+router.get('/search', postController.searchPost);
 
 router.use(verifyToken)
 router.post('/create-new', postController.createNewPost);
