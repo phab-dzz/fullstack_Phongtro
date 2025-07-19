@@ -1,4 +1,4 @@
-import db from "../models";
+import db from "../models/index.js";
 export const getProvincesService = () => new Promise(async (resolve, reject) => {
     try {
         const response = await db.Province.findAll({

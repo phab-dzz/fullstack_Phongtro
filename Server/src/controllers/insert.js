@@ -1,10 +1,10 @@
 // import * as authService from '../services/auth';
-import * as insertService from '../services/insert';
+import * as insertService from '../services/insert.js';
 export const insert = async (req, res) => {
 
     try {
 
-        const response = await insertService.insertService();
+        const response = await insertService.createPricesAndAreas();
 
         return res.status(200).json(response);
     }

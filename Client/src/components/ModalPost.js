@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Edit2, Save, Calendar, DollarSign, FileText, Image, Hash, Locate, Upload, Trash2 } from 'lucide-react';
+import { X, Edit2, Save, Calendar, DollarSign, FileText, Image, Hash, Locate, Upload, Trash2 ,LandPlot} from 'lucide-react';
 import { apiUploadImages } from '../services'
 
 const ModalPost = ({ isOpen, onClose, item, onSave }) => {
@@ -14,7 +14,9 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
     expired: '',
     images: [],
     description: '',
-    address: ''
+    address: '',
+    area: '',
+   
   });
 
   useEffect(() => {
@@ -30,7 +32,9 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
         expired: item?.overviews?.expired || '',
         images: itemImages,
         description: item?.description || '',
-        address: item?.address || ''
+        address: item?.address || '',
+        area: item?.attributes?.acreage || '',
+       
       });
       setImagesPreview(itemImages);
     }
@@ -102,14 +106,17 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
       title: formData.title,
       attributes: {
         ...item.attributes,
-        price: formData.price
+        price: formData.price,
+        acreage: formData.area,
       },
       images: {
         ...item.images,
         image: formData.images.filter(img => img.trim() !== '')
       },
       description: formData.description,
-      address: formData.address || item.address
+      address: formData.address || item.address,
+      
+    
     };
     
     onSave(updatedItem);
@@ -128,7 +135,9 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
       expired: item?.overviews?.expired || '',
       images: itemImages,
       description: item?.description || '',
-      address: item?.address || ''
+      address: item?.address || '',
+      area: item?.attributes?.acreage || '',
+      
     });
     setImagesPreview(itemImages);
     setIsEditing(false);
@@ -351,6 +360,31 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
               )}
             </div>
           </div>
+          {/* area */}
+           <div className="flex flex-col items-start gap-3">
+            <div className='flex items-center gap-2'>
+              <LandPlot className="text-gray-500" size={12} />
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Diện tích
+              </label>
+            </div>
+            <div className="w-full">
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={formData.area}
+                  onChange={(e) => handleInputChange('area', e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  placeholder="Nhập diện tích"
+                />
+              ) : (
+                <p className="text-gray-800 bg-gray-50 px-3 py-2 rounded-lg">{formData.area}</p>
+              )}
+            </div>
+          </div>
+                 
+           
+
 
           {/* Created Date */}
           <div className="flex items-center gap-3">

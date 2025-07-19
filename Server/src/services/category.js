@@ -1,5 +1,5 @@
-import { raw } from 'body-parser';
-import db from '../models';
+
+import db from '../models/index.js';
 // get all categories
 export const getCategoriesService = () => new Promise(async (resolve, reject) => {
     try {

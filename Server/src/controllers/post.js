@@ -1,5 +1,5 @@
 import { query } from 'express';
-import * as postService from '../services/post';
+import * as postService from '../services/post.js';
 
 export const getPosts = async (req, res) => {
     try {
@@ -15,19 +15,18 @@ export const getPosts = async (req, res) => {
 }
 export const getPostLimit = async (req, res) => {
     // const { offset, query } = req.query
-     const { page, priceNumber, areaNumber, ...query } = req.query
-    // console.log("page" + page, "query:" + query)
-
+     const { page, priceNumber, areaNumber,isNewest, ...query } = req.query
+    console.log("query from get post limit", query)
 
     try {
 
-        const response = await postService.getPostLimitService(page, query,{ priceNumber, areaNumber });
+        const response = await postService.getPostLimitService(page, query,{ priceNumber, areaNumber, isNewest });
         return res.status(200).json(response)
     }
     catch(error) {
         return res.status(500).json({
             err: -1,
-            msg: 'fail in controller'
+            msg: 'fail in controller'+ error
         })
     }
 }
@@ -129,7 +128,7 @@ export const updatepostByadmin= async (req, res) => {
     const { id } = req.user;
     const { postId } = req.params;
     const data = req.body;
-    console.log("Id from update post by admin", id)
+    console.log("Data from update post by admin", data)
     try {
         if (!id) {
             return res.status(400).json({
@@ -143,7 +142,7 @@ export const updatepostByadmin= async (req, res) => {
     catch (error) {
         return res.status(500).json({
             err: -1,
-            msg: 'fail in controller' + error
+            msg: `fail in controller: ${error.message || error.toString()}`
         })
     }
 }

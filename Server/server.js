@@ -1,13 +1,13 @@
 import express from 'express';
 
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 import cors from 'cors';
-import initRoutes from './src/routes';
-import generateDate from './src/utils/generateDate';
-import generateCode from './src/utils/generateCode';
-import connectDatabase from './src/config/connectDatabase';
+import initRoutes from './src/routes/index.js';
+
+import connectDatabase from './src/config/connectDatabase.js';
 const app = express();
-console.log(generateCode("thành phố hồ chí minh"));
+
 app.use(cors({
     origin: process.env.CLIENT_URL,
     methods: ['GET', 'POST', 'PUT', 'DELETE']
@@ -20,7 +20,7 @@ app.use(express.urlencoded({ extended: true }));
 // );
 initRoutes(app);
 connectDatabase();
-console.log("current date", generateDate());
+
 const PORT = process.env.PORT || 8000;
 
 app.listen(PORT, () => {

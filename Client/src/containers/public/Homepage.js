@@ -39,7 +39,7 @@ l
                 <div className="w-[30%] border flex flex-col gap-4 justify-start items-center ">
                     <ItemSidebar content={categories} title='Danh sach cho thue' />
                     <ItemSidebar isDouble={true} type='priceCode' content={prices} title='Xem theo giá' />
-                    <ItemSidebar isDouble={true} content={areas} title='Xem theo Diện tích' />
+                    <ItemSidebar isDouble={true} type='areaCode' content={areas} title='Xem theo Diện tích' />
                     <RelatedPost />
                 </div>
             </div>

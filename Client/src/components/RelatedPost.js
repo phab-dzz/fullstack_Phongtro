@@ -15,7 +15,8 @@ import * as actions from '../store/actions';
                 {newPosts?.map((item) => {
                     return (
                         <Sitem
-                            key={item.id}
+                            // key={item.id}
+                            code={item.id}
                             title={item.title}
                             price={item?.attributes?.price}
                             createdAt={item.createdAt}

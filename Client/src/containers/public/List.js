@@ -38,6 +38,23 @@ const List = ({categoryCode}) => {
         if(categoryCode) searchParamsObject.categoryCode = categoryCode
         dispatch(getPostsLimit(searchParamsObject))
     }, [searchParams])
+    const handlepostlastest = () => {
+        let searchParamsObject = {
+            ...Object.fromEntries(searchParams.entries()),
+            isNewest: true,
+        }
+        // searchParamsObject.page = 0
+        // searchParamsObject.sort = 'createdAt'
+        // searchParamsObject.order = 'DESC'
+        dispatch(getPostsLimit(searchParamsObject))
+
+    }
+    const handlepostdefault = () => {
+        let searchParamsObject = {  ...Object.fromEntries(searchParams.entries()) }
+        dispatch(getPostsLimit(searchParamsObject))
+    }
+
+
 
     // if (!posts.posts) {
     //     return <div>Loading...</div>;
@@ -59,21 +76,21 @@ const List = ({categoryCode}) => {
     //     dispatch(getPostsLimit(searchParamsObject))
     // }, [searchParams, categoryCode])
     return (
-        <div className="w-full border-red-400 border p-2 bg-white rounded-md">
+        <div className="w-full border-red-200 border p-2 bg-white rounded-md">
             <div className="flex items-center justify-between">
                 <h4 className="text-xl font-semibold ">
-                    Danh sach dang tin
+                    Danh sách bài đăng
                 </h4>
                 <span>
-                    cap nhat ngay
+                   Cập nhật ngay
                 </span>
             </div>
             <div className=" flex items-center gap-2 my-2">
                 <span>
                     Sắp xếp
                 </span>
-                <Button bgColor={'bg-gray-200'} text={'Mặc định'} />
-                <Button bgColor={'bg-gray-200'} text={'Mới nhất'} />
+                <Button bgColor={'bg-gray-200'} text={'Mặc định'} onClick={handlepostdefault} />
+                <Button bgColor={'bg-gray-200'} text={'Mới nhất'} onClick={handlepostlastest} />
 
             </div>
             <div className='items'>

@@ -72,15 +72,15 @@ const ManagePost = () => {
        </div>
        <table className="w-full table-auto">
               <thead>
-                <tr className="border-b-2 border-gray-200">
-                    <th className="py-2">Mã tin</th>
-                    <th className="py-2">Ảnh </th>
-                    <th className="py-2">Tiêu đề</th>
-                    <th className="py-2">Gía</th>
-                    <th className="py-2">Ngày bắt đầu</th>
-                    <th className="py-2">Ngày hết hạn</th>
-                    <th className="py-2">Trạng thái</th>
-                    <th className="py-2">Hành động</th>
+                <tr className="border border-gray-500">
+                    <th className="py-2 border">Mã tin</th>
+                    <th className="py-2 border">Ảnh </th>
+                    <th className="py-2 border">Tiêu đề</th>
+                    <th className="py-2 border">Gía</th>
+                    <th className="py-2 border">Ngày bắt đầu</th>
+                    <th className="py-2 border">Ngày hết hạn</th>
+                    <th className="py-2 border">Trạng thái</th>
+                    <th className="py-2 border">Hành động</th>
                 </tr>
               </thead>
               <tbody>

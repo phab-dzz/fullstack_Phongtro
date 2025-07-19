@@ -110,8 +110,10 @@ export const apiUpdatePostByAdmin = (data, id) => new Promise(async (resolve, re
             url: `/api/v1/post/update/${id}`,
             data: data
         })
+        console.log('response in update', response)
         resolve(response)
     } catch (error) {
+
         reject(error)
     }
 })

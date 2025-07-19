@@ -1,11 +1,11 @@
-import authRouter from './auth';
-import insertRouter from './insert';
-import categoryRoutes from './category';
-import postRouter from './post';
-import priceRouter from './price';
-import areaRouter from './area';
-import provinceRouter from './province';
-import userRouter from './user';
+import authRouter from './auth.js';
+import insertRouter from './insert.js';
+import categoryRoutes from './category.js';
+import postRouter from './post.js';
+import priceRouter from './price.js';
+import areaRouter from './area.js';
+import provinceRouter from './province.js';
+import userRouter from './user.js';
 const initRoutes = (app) => {
     app.use('/api/v1/auth', authRouter)
     app.use('/api/v1/insert', insertRouter)
@@ -20,4 +20,4 @@ const initRoutes = (app) => {
         res.send('server on')
     })
 }
-module.exports = initRoutes;
+export default initRoutes;

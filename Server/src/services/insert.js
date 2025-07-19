@@ -1,15 +1,39 @@
-import db from '../models'
+import db from '../models/index.js';
 import bcrypt from 'bcryptjs'
 import { v4 } from 'uuid'
-import chothuematbang from '../../data/chothuematbang.json'
-import chothuecanho from '../../data/chothuecanho.json'
-import nhachothue from '../../data/nhachothue.json'
-import chothuephongtro from '../../data/chothuephongtro.json'
-import generateCode from '../utils/generateCode'
-import { dataPrice, dataArea } from '../utils/data'
-import generateDate from '../utils/generateDate'
-import { getNumberFromString, getNumberFromStringV2 } from '../utils/common'
-require('dotenv').config()
+import fs from 'fs/promises';
+
+
+import generateCode from '../utils/generateCode.js';
+
+const __dirname = new URL('.', import.meta.url);
+
+// Hàm load JSON từ file
+const loadJSON = async (relativePath) => {
+    const data = await fs.readFile(new URL(relativePath, import.meta.url));
+    return JSON.parse(data);
+};
+
+// Tải toàn bộ dữ liệu JSON
+const chothuematbang = await loadJSON('../../data/chothuematbang.json');
+const chothuecanho = await loadJSON('../../data/chothuecanho.json');
+const nhachothue = await loadJSON('../../data/nhachothue.json');
+const chothuephongtro = await loadJSON('../../data/chothuephongtro.json');
+// import chothuematbang from '../../data/chothuematbang.json' 
+// import chothuecanho from '../../data/chothuecanho.json'
+// import nhachothue from '../../data/nhachothue.json'
+// import chothuephongtro from '../../data/chothuephongtro.json'
+// const chothuematbang = require('../../data/chothuematbang.json');
+// const chothuecanho = require('../../data/chothuecanho.json');
+// const nhachothue = require('../../data/nhachothue.json');
+// const chothuephongtro = require('../../data/chothuephongtro.json');
+import { dataPrice, dataArea } from '../utils/data.js'
+import generateDate from '../utils/generateDate.js'
+import { getNumberFromString, getNumberFromStringV2 } from '../utils/common.js'
+
+import dotenv from 'dotenv';
+dotenv.config();
+
 const dataBody = [
     {
         body: chothuephongtro.body,

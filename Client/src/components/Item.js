@@ -28,24 +28,49 @@ const Item = ({ images, user, title, star, description, attributes, address, id 
     return (
         <div className='w-full flex border-t border-orange-600 py-4'>
             <Link
-                to={`chi-tiet/${formatVietnameseToString(title)}/${id}`}
-                className='w-2/5 flex flex-wrap gap-[2px] items-center relative cursor-pointer'
-            >
-                {images.length > 0 && images.filter((i, index) => indexs.some(i => i === index))?.map((i, index) => {
-                    return (
-                        <img key={index} src={i} alt="preview" className='w-[47%] h-[120px] object-cover' />
-                    )
-                })}
-                <span className='bg-overlay-70 text-white px-2 rounded-md absolute left-1 bottom-4'>{`${images.length} ảnh`}</span>
-                <span
-                    className='text-white absolute right-5 bottom-1'
-                    onMouseEnter={() => setIsHoverHeart(true)}
-                    onMouseLeave={() => setIsHoverHeart(false)}
-                >
-                    {isHoverHeart ? <RiHeartFill size={26} color='red' /> : <RiHeartLine size={26} />}
-                </span>
-            </Link>
-            <div className='w-3/5'>
+    to={`chi-tiet/${formatVietnameseToString(title)}/${id}`}
+    className='w-2/5 flex flex-wrap gap-[2px] items-center relative cursor-pointer'
+>
+    {(() => {
+        const imagesToShow = images.filter((_, index) => indexs.includes(index));
+        const imgCount = imagesToShow.length;
+
+        return imagesToShow.map((img, index) => {
+            let widthClass = 'w-full';
+            let heightClass = 'h-full';
+
+            if (imgCount === 2) {
+                widthClass = 'w-[calc(50%-1px)]'; 
+                heightClass = 'h-[200px]';         
+            } else if (imgCount >= 3) {
+                widthClass = 'w-[47%]';
+                heightClass = 'h-[120px]';
+            }
+
+            return (
+                <img
+                    key={index}
+                    src={img}
+                    alt="preview"
+                    className={`${widthClass} ${heightClass}  object-cover rounded`}
+                />
+            );
+        });
+    })()}
+    <span className='bg-overlay-70 text-white px-2 rounded-md absolute left-1 bottom-4'>
+        {`${images.length} ảnh`}
+    </span>
+    <span
+        className='text-white absolute right-5 bottom-1'
+        onMouseEnter={() => setIsHoverHeart(true)}
+        onMouseLeave={() => setIsHoverHeart(false)}
+    >
+        {isHoverHeart ? <RiHeartFill size={26} color='red' /> : <RiHeartLine size={26} />}
+    </span>
+</Link>
+
+
+            <div className='w-3/5 ml-1'>
                 <div className='flex justify-between gap-4 w-full'>
                     <div className='text-red-600 font-medium'>
                         {handleStar(+star).length > 0 && handleStar(+star).map((star, number) => {

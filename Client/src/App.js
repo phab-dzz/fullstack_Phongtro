@@ -34,7 +34,8 @@ function App() {
           <Route path={path.CHO_THUE_MAT_BANG} element={<Rental />} />
           <Route path={path.CHO_THUE_PHONG_TRO} element={<Rental />} />
           <Route path={path.NHA_CHO_THUE} element={<Rental />} />
-          <Route path={'chi-tiet/*'} element={<DetailsPost />} />
+          <Route path={path.DETAIL_POST__TITLE_POSTID} element={<DetailsPost />} />
+          <Route path={path.DETAIL_POST__WITH_SEARCH} element={<DetailsPost />} />
 
         </Route>
         <Route path={path.SYSTEM} element={<System />} >

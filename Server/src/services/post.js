@@ -1,8 +1,8 @@
 import { where } from "sequelize";
-import db from "../models";
+import db from "../models/index.js";
 import { v4 } from 'uuid'
-import generateCode from "../utils/generateCode";
-import generateDate from "../utils/generateDate";
+import generateCode from "../utils/generateCode.js";
+import generateDate from "../utils/generateDate.js";
 import { Op } from "sequelize";
 
 export const getPostService = () => new Promise(async (resolve, reject) => {
@@ -198,14 +198,14 @@ export const getPostLimitAdminService = (id) => new Promise(async (resolve, reje
         const response = await db.Post.findAndCountAll(
             {
                 where: { userId: id },
-                raw: true,
-                nest: true,// gộp lại thành object
+                // raw: true,
+                // nest: true,// gộp lại thành object
                 // offset: 1 * +process.env.LIMIT,
                 // limit: +process.env.LIMIT,
 
                 include: [
-                    { model: db.Image, as: 'images', attributes: ['image'] },
-                    { model: db.Attribute, as: 'attributes', attributes: ['price', 'acreage', 'published', 'hashtag'] },
+                    { model: db.Image, as: 'images', attributes: ['image', 'id'] },
+                    { model: db.Attribute, as: 'attributes', attributes: ['price', 'acreage', 'published', 'hashtag','id'] },
                     { model: db.User, as: 'user', attributes: ['name', 'zalo', 'phone'] },
                     { model: db.Overview, as: 'overviews', attributes: ['code', 'area', 'type', 'target', 'bonus', 'created', 'expired'] }
                 ],
@@ -247,26 +247,97 @@ export const deletePostService = (postId,id) => new Promise(async (resolve, reje
     }
 })
 export const updatePostServicebyadmin = (data, id) => new Promise(async (resolve, reject) => {
-    try {
-        const response = await db.Post.update(data, {
-            where: { id }
-        })
-        resolve({
-            err: response ? 0 : 1,
-            msg: response ? 'Update post successfully' : 'Failed to update post',
-            response
-        })
-
-    } catch (error) {
-        reject(error)
+  try {
+    if (!data || !id) {
+      return resolve({ err: 1, msg: 'Missing input data' });
     }
+
+  
+    const post = await db.Post.findOne({ where: { id }, raw: true });
+    if (!post) return resolve({ err: 1, msg: 'Post not found' });
+
+   
+    let updated = {
+      post: false,
+      image: false,
+      attribute: false
+    };
+
+   
+    if (data.images?.image && Array.isArray(data.images.image)) {
+  const oldImages = await db.Image.findOne({ where: { id: post.imagesId }, raw: true });
+
+  const oldImageArray = typeof oldImages.image === 'string' ? JSON.parse(oldImages.image) : oldImages.image;
+
+  if (JSON.stringify(oldImageArray) !== JSON.stringify(data.images.image)) {
+    await db.Image.update(
+      { image: JSON.stringify(data.images.image) }, // convert mảng → chuỗi JSON
+      { where: { id: post.imagesId } }
+    );
+    updated.image = true;
+  }
 }
-)
+
+
+    
+    if (data.attributes) {
+      const oldAttr = await db.Attribute.findOne({ where: { id: post.attributesId }, raw: true });
+
+      const attrToUpdate = {
+        price: data.attributes.price,
+        acreage: data.attributes.acreage
+      };
+
+      if (
+        attrToUpdate.price !== oldAttr.price ||
+        attrToUpdate.acreage !== oldAttr.acreage
+      ) {
+        await db.Attribute.update(attrToUpdate, { where: { id: post.attributesId } });
+        updated.attribute = true;
+      }
+    }
+
+   
+    const postToUpdate = {
+      title: data.title,
+      address: data.address,
+      description: data.description
+    };
+
+    const hasPostChanged = Object.entries(postToUpdate).some(([key, val]) => post[key] !== val);
+
+    if (hasPostChanged) {
+      await db.Post.update(postToUpdate, { where: { id } });
+      updated.post = true;
+    }
+
+   
+    const isAnyUpdate = Object.values(updated).some(val => val);
+
+    resolve({
+      err: isAnyUpdate ? 0 : 1,
+      msg: isAnyUpdate ? 'Cập nhật thành công' : 'Không có thay đổi để cập nhật',
+      updated
+    });
+
+  } catch (error) {
+    console.log('Error in updatePostServicebyadmin:', error);
+
+   
+    if (error instanceof SyntaxError && error.message.includes('JSON')) {
+      return resolve({ err: -1, msg: `Lỗi dữ liệu JSON: ${error.message}` });
+    }
+
+    reject(error);
+  }
+});
+
+
 export const searchPostService = (query) => new Promise(async (resolve, reject) => {
     try {
         const { find, provinceCode } = query;
 
-        // Xây dựng điều kiện where động
+        
         let wherePost = {};
         if (find) {
             wherePost[Op.or] = [
@@ -316,24 +387,17 @@ export const searchPostService = (query) => new Promise(async (resolve, reject) 
         reject(error);
     }
 });
-export const getPostLimitService = (page, query, { priceNumber, areaNumber }) => new Promise(async (resolve, reject) => {
+export const getPostLimitService = (page, query, { priceNumber, areaNumber, isNewest }) => new Promise(async (resolve, reject) => {
     try {
-        // Xử lý phân trang
         const limit = +process.env.LIMIT || 10;
         const offset = (!page || +page <= 1) ? 0 : (+page - 1) * limit;
 
         const { search, ...restQuery } = query;
-
-        // Khởi tạo điều kiện where
         const queries = { ...restQuery };
 
-        // Lọc theo khoảng giá
         if (priceNumber) queries.priceNumber = { [Op.between]: priceNumber };
-
-        // Lọc theo diện tích
         if (areaNumber) queries.areaNumber = { [Op.between]: areaNumber };
 
-        // Lọc theo từ khóa (title, address)
         if (search) {
             queries[Op.or] = [
                 { title: { [Op.like]: `%${search}%` } },
@@ -341,7 +405,8 @@ export const getPostLimitService = (page, query, { priceNumber, areaNumber }) =>
             ];
         }
 
-        const response = await db.Post.findAndCountAll({
+        // 👉 Tạo object cấu hình query
+        const options = {
             where: queries,
             raw: true,
             nest: true,
@@ -364,8 +429,14 @@ export const getPostLimitService = (page, query, { priceNumber, areaNumber }) =>
                     attributes: ['name', 'zalo', 'phone', 'avatar'],
                 },
             ],
-            attributes: ['id', 'title', 'star', 'address', 'description'],
-        });
+            attributes: ['id', 'title', 'star', 'address', 'description','createdAt'],
+        };
+
+        if (isNewest) {
+            options.order = [['createdAt', 'DESC']];
+        }
+
+        const response = await db.Post.findAndCountAll(options);
 
         resolve({
             err: 0,

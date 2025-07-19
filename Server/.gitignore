@@ -1,5 +1,10 @@
-/node_modules
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Node modules
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example  # nếu bạn muốn giữ file ví dụ cấu hình
+
+# Sequelize config
+Server/src/config/config.json

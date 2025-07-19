@@ -1,4 +1,4 @@
-import db from '../models'
+import db from '../models/index.js';
 
 export const getOne =(id)=> new Promise(async (resolve, reject) => {
        try {
