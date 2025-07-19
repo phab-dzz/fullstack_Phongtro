@@ -1,9 +1,9 @@
 import React from "react";
-import { apiChangePassword } from "../../services";
 import { useState } from "react";
 import { useSelector } from "react-redux";
+import { Eye, EyeOff } from "lucide-react";
 import Swal from "sweetalert2";
-
+import { apiChangePassword } from "../../services"; 
 const ChangePassword = () => {
     const {currentData} = useSelector(state => state.user);
     console.log("currentUser", currentData);
@@ -15,7 +15,7 @@ const ChangePassword = () => {
         confirmNewPassword: ''
     });
 
-    // State để quản lý hiển thị/ẩn mật khẩu
+
     const [showPassword, setShowPassword] = useState({
         password: false,
         newPassword: false,
@@ -30,7 +30,7 @@ const ChangePassword = () => {
         });
     };
 
-    // Hàm toggle hiển thị/ẩn mật khẩu
+    
     const togglePasswordVisibility = (field) => {
         setShowPassword({
             ...showPassword,
@@ -72,7 +72,7 @@ const ChangePassword = () => {
         <div className="flex flex-col items-center justify-center w-full mt-10 ">
             <div className="w-full max-w-md p-6 bg-gray-200 rounded-lg shadow-md">
                 <h2 className="text-2xl font-bold mb-4 text-center">Đổi Mật Khẩu</h2>
-                <form onSubmit={handlesubmitpassword}>
+                <div onSubmit={handlesubmitpassword}>
                    
                     <div className="mb-4">
                         <label className="block text-sm font-medium text-gray-700 mb-1">Mật khẩu hiện tại</label>
@@ -89,12 +89,12 @@ const ChangePassword = () => {
                             <button
                                 type="button"
                                 onClick={() => togglePasswordVisibility('password')}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
                             >
                                 {showPassword.password ? (
-                                    <i className="fas fa-eye-slash text-gray-500 hover:text-gray-700"></i>
+                                    <EyeOff size={20} />
                                 ) : (
-                                    <i className="fas fa-eye text-gray-500 hover:text-gray-700"></i>
+                                    <Eye size={20} />
                                 )}
                             </button>
                         </div>
@@ -115,12 +115,12 @@ const ChangePassword = () => {
                             <button
                                 type="button"
                                 onClick={() => togglePasswordVisibility('newPassword')}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
                             >
                                 {showPassword.newPassword ? (
-                                    <i className="fas fa-eye-slash text-gray-500 hover:text-gray-700"></i>
+                                    <EyeOff size={20} />
                                 ) : (
-                                    <i className="fas fa-eye text-gray-500 hover:text-gray-700"></i>
+                                    <Eye size={20} />
                                 )}
                             </button>
                         </div>
@@ -141,21 +141,23 @@ const ChangePassword = () => {
                             <button
                                 type="button"
                                 onClick={() => togglePasswordVisibility('confirmNewPassword')}
-                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
                             >
                                 {showPassword.confirmNewPassword ? (
-                                    <i className="fas fa-eye-slash text-gray-500 hover:text-gray-700"></i>
+                                    <EyeOff size={20} />
                                 ) : (
-                                    <i className="fas fa-eye text-gray-500 hover:text-gray-700"></i>
+                                    <Eye size={20} />
                                 )}
                             </button>
                         </div>
                     </div>
 
-                    <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200">
+                    <button 
+                        onClick={handlesubmitpassword}
+                        className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition duration-200">
                         Đổi Mật Khẩu
                     </button>
-                </form>
+                </div>
             </div>
         </div>
     );

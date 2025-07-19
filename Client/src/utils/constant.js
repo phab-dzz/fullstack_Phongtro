@@ -32,7 +32,7 @@ export const location = [
         id: 'hn',
     },
     {
-        name: 'Phòng trọ Đà nẵng',
+        name: 'Phòng trọ Đà Nẵng',
         image: 'https://PhongTro123.com/images/location_dn.jpg',
         id: 'dn',
     }

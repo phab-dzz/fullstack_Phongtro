@@ -7,7 +7,7 @@ import { location } from "../utils/constant";
 const Province = () => {
 
     return (
-        <div className=" flex items-center gap-5 justify-center py-4">
+        <div className=" flex items-center gap-1 md:gap-4 justify-center py-4">
             {location.map((item) => {
 
                 return (
@@ -19,6 +19,7 @@ const Province = () => {
                 )
             })
             }
+            
         </div>
     );
 }

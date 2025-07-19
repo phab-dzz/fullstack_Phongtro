@@ -175,7 +175,7 @@ let cateValue = cate?.value?.trim() || '';
 
                     </div> */}
                 </div>
-                <div className='w-[30%] '>
+                <div className='hidden md:w-[30%] '>
                     <MapWithSearch address={payload.address} />
                    
                 </div>

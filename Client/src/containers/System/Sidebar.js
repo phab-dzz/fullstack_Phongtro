@@ -96,7 +96,8 @@ const Sidebar = ({ isOpen, onClose }) => {
             onClick={onClose}
           >
             {item.icon}
-            <span>{item.text}</span>
+           <span>{item.text.split(' ').slice(0, 2).join(' ')}</span>
+
           </NavLink>
         ))}
 

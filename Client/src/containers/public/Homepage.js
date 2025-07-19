@@ -16,14 +16,14 @@ const Homepage = () => {
 
 
     return (
-        <div className="  w-full flex flex-col gap-3 m-2">
+        <div className="w-full flex flex-col gap-3 m-2">
 
             <div>
 
-                <h1 className="text-[28px] font-bold ">
+                <h1 className="text-[25px] font-bold ">
                     {text.HOME_TITLE}
                 </h1>
-                <p className="text-sm text-gray-600">
+                <p className="text-[13px] text-gray-600">
                     {text.HOME_DESCRIPTION}
                 </p>
             </div >

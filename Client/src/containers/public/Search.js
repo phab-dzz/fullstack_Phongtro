@@ -93,8 +93,8 @@ const Search = () => {
 
     return (
         <>
-            {/* Desktop Search */}
-            <div className='hidden lg:flex p-[10px] w-3/5 my-3 bg-[#febb02] rounded-lg flex-col lg:flex-row items-center justify-around gap-2'>
+           
+            <div className='hidden lg:flex p-[10px] w-3/5 my-1 bg-[#febb02] rounded-lg flex-col lg:flex-row items-center justify-around gap-2'>
                 <span onClick={() => handleShowModal(categories, 'category', 'Tìm tất cả')} className='cursor-pointer flex-1'>
                     <SearchItem 
                         IconBefore={MdOutlineHouseSiding && <MdOutlineHouseSiding />} 
@@ -125,7 +125,7 @@ const Search = () => {
                     className='outline-none py-2 px-4 flex-1 bg-secondary1 text-[13.3px] flex items-center justify-center gap-2 text-white font-medium h-[36px] rounded-md w-[120px] flex-shrink-0'
                 >
                     <SearchIcon />
-                    Tìm
+                    Tìm kiếm
                 </button>
             </div>
 
@@ -159,7 +159,7 @@ const Search = () => {
                         className='outline-none py-2 px-4 bg-secondary1 text-sm flex items-center justify-center gap-2 text-white font-medium h-[36px] rounded-md flex-shrink-0'
                     >
                         <SearchIcon size={16} />
-                        <span className='hidden sm:inline'>Tìm kiếm</span>
+                        <span className='hidden sm:inline'>Tìm</span>
                     </button>
                 </div>
 

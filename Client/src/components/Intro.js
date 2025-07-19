@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Button } from '../components';
 import { formatVietnameseToString } from "../utils/common/formatVietnameseToString";
+import { useNavigate } from "react-router-dom";
 
 const { GrStar } = icons;
 
@@ -12,6 +13,15 @@ const star = [1, 2, 3, 4, 5];
 
 const Intro = () => {
     const { categories } = useSelector((state) => state.app);
+    const {isLoggedIn} = useSelector(state => state.auth);
+    const navigate = useNavigate();
+    const handlepost = () => {
+        if (!isLoggedIn) {
+            navigate('/login');
+        } else {
+            navigate('/he-thong/tao-moi-bai-dang');
+        }
+    };
     
     return (
         <div className="w-full max-w-4xl mx-auto bg-white rounded-md shadow-md p-4 sm:p-6 lg:p-8 gap-4 flex flex-col justify-center items-center">
@@ -92,6 +102,7 @@ const Intro = () => {
                     textColor='text-white'
                     px='px-4 sm:px-6'
                     className="w-full sm:w-auto text-sm sm:text-base"
+                    onClick={handlepost}
                 />
             </div>
             
