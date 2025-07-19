@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Navigation } from "../public";
 import { Menu } from "lucide-react"; // hoặc dùng bất kỳ icon nào bạn muốn
 
-const Header = () => {
+const Header = ({ onToggleSidebar }) => {
   const [showMenu, setShowMenu] = useState(false);
 
   return (
@@ -13,20 +13,21 @@ const Header = () => {
       </div>
 
    
-      <div className="hidden md:block flex-grow">
+      <div className="hidden md:block flex-grow ">
         <Navigation isAdmin={true} />
       </div>
 
       <button
         className="md:hidden "
         onClick={() => setShowMenu((prev) => !prev)}
+
       >
         <Menu size={24} />
       </button>
 
    
       {showMenu && (
-        <div className="absolute top-[60px] left-0 w-full bg-white shadow-md z-40 md:hidden animate-slide-down">
+        <div className="absolute top-[60px] left-0 w-full bg-white shadow-md z-50 md:hidden animate-slide-down">
           <Navigation isAdmin={true} />
         </div>
       )}

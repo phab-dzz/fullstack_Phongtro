@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { X, Edit2, Save, Calendar, DollarSign, FileText, Image, Hash, Locate, Upload, Trash2 ,LandPlot} from 'lucide-react';
 import { apiUploadImages } from '../services'
+import moment from 'moment';
 
 const ModalPost = ({ isOpen, onClose, item, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
@@ -40,12 +41,10 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
     }
   }, [item]);
 
-  const checkStatus = (dateStr) => {
-    if (!dateStr) return false;
-    const expiredDate = new Date(dateStr);
-    const currentDate = new Date();
-    return currentDate <= expiredDate;
-  };
+ 
+   const checkStatus = (date) =>
+     moment(date, process.env.REACT_APP_FORMAT_DATE).isSameOrAfter(new Date().toDateString());
+ 
 
   const handleInputChange = (field, value) => {
     setFormData(prev => ({
@@ -144,12 +143,13 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
   };
 
   if (!isOpen || !item) return null;
+  console.log("status:", item?.overviews?.expired?.split(' ')[3]);
 
   const status = checkStatus(item?.overviews?.expired?.split(' ')[3]);
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-lg">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 ">
+      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto shadow-lg hide-scrollbar">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b">
           <h2 className="text-2xl text-center font-semibold text-gray-800">
@@ -310,7 +310,7 @@ const ModalPost = ({ isOpen, onClose, item, onSave }) => {
                   placeholder="Nhập mô tả"
                 />
               ) : (
-                <p className="text-gray-800 bg-gray-50 px-3 py-2 rounded-lg">{formData.description}</p>
+                <p className="text-gray-800 bg-gray-50 px-3 py-2 rounded-lg"> {formData?.description?.replace('Thông tin mô tả:', '').replace(/[-]{2,}/g, '').replace(/["']/g, '').replace(/["'\[\]]/g, '').trim()}</p>
               )}
             </div>
           </div>

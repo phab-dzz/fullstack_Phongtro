@@ -29,14 +29,14 @@ const Homepage = () => {
             </div >
             <Province />
             <div className="w-full flex gap-4">
-                <div className="w-[70%]">
+                <div className="w-full md:w-[70%] ">
                     <List page1={params.get('page')} />
                     <Pagination length={40} Number={params.get('page')} />
                     {/* <div className=" h-[500px]" >
 l
                     </div> */}
                 </div>
-                <div className="w-[30%] border flex flex-col gap-4 justify-start items-center ">
+                <div className="w-[30%] hidden md:block border flex flex-col gap-4 justify-start items-center ">
                     <ItemSidebar content={categories} title='Danh sach cho thue' />
                     <ItemSidebar isDouble={true} type='priceCode' content={prices} title='Xem theo giá' />
                     <ItemSidebar isDouble={true} type='areaCode' content={areas} title='Xem theo Diện tích' />

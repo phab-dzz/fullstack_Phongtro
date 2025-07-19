@@ -17,7 +17,7 @@ const Navigation = () => {
   }, []);
 
   return (
-    <div className="w-full bg-secondary1 text-white">
+    <div className="w-full bg-secondary1 text-white ">
       <div className="flex flex-col md:flex-row items-start md:items-center justify-start md:justify-center text-sm font-medium">
         <NavLink
           to={`/`}

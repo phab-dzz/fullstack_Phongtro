@@ -175,11 +175,12 @@ let cateValue = cate?.value?.trim() || '';
 
                     </div> */}
                 </div>
-                <div className='w-[30%] flex-none'>
+                <div className='w-[30%] '>
                     <MapWithSearch address={payload.address} />
                    
                 </div>
             </div>
+            <div className="h-[50px]"></div>
         </div>
     )
 }

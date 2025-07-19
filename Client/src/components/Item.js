@@ -26,96 +26,104 @@ const Item = ({ images, user, title, star, description, attributes, address, id 
     }
     
     return (
-        <div className='w-full flex border-t border-orange-600 py-4'>
-            <Link
+        <div className='w-full flex flex-col md:flex-row border-t border-orange-600 py-4'>
+  <Link
     to={`chi-tiet/${formatVietnameseToString(title)}/${id}`}
-    className='w-2/5 flex flex-wrap gap-[2px] items-center relative cursor-pointer'
->
+    className='w-full md:w-2/5 flex flex-wrap gap-[2px] items-center relative cursor-pointer'
+  >
     {(() => {
-        const imagesToShow = images.filter((_, index) => indexs.includes(index));
-        const imgCount = imagesToShow.length;
+      const imagesToShow = images.filter((_, index) => indexs.includes(index));
+      const imgCount = imagesToShow.length;
 
-        return imagesToShow.map((img, index) => {
-            let widthClass = 'w-full';
-            let heightClass = 'h-full';
+      return imagesToShow.map((img, index) => {
+        let widthClass = 'w-full';
+        let heightClass = 'h-full';
 
-            if (imgCount === 2) {
-                widthClass = 'w-[calc(50%-1px)]'; 
-                heightClass = 'h-[200px]';         
-            } else if (imgCount >= 3) {
-                widthClass = 'w-[47%]';
-                heightClass = 'h-[120px]';
-            }
+        if (imgCount === 2) {
+          widthClass = 'w-[calc(50%-1px)]';
+          heightClass = 'h-[200px]';
+        } else if (imgCount >= 3) {
+          widthClass = 'w-[47%]';
+          heightClass = 'h-[120px]';
+        }
 
-            return (
-                <img
-                    key={index}
-                    src={img}
-                    alt="preview"
-                    className={`${widthClass} ${heightClass}  object-cover rounded`}
-                />
-            );
-        });
+        return (
+          <img
+            key={index}
+            src={img}
+            alt="preview"
+            className={`${widthClass} ${heightClass} object-cover rounded`}
+          />
+        );
+      });
     })()}
     <span className='bg-overlay-70 text-white px-2 rounded-md absolute left-1 bottom-4'>
-        {`${images.length} ảnh`}
+      {`${images.length} ảnh`}
     </span>
     <span
-        className='text-white absolute right-5 bottom-1'
-        onMouseEnter={() => setIsHoverHeart(true)}
-        onMouseLeave={() => setIsHoverHeart(false)}
+      className='text-white absolute right-5 bottom-1'
+      onMouseEnter={() => setIsHoverHeart(true)}
+      onMouseLeave={() => setIsHoverHeart(false)}
     >
-        {isHoverHeart ? <RiHeartFill size={26} color='red' /> : <RiHeartLine size={26} />}
+      {isHoverHeart ? <RiHeartFill size={26} color='red' /> : <RiHeartLine size={26} />}
     </span>
-</Link>
+  </Link>
 
+  <div className='w-full md:w-3/5 mt-2 md:mt-0 md:ml-1'>
+    <div className='flex justify-between gap-4 w-full'>
+      <div className='text-red-600 font-medium text-sm md:text-base'>
+        {handleStar(+star).length > 0 &&
+          handleStar(+star).map((star, number) => (
+            <span key={number}>{star}</span>
+          ))}
+        {title}
+      </div>
+      <div className='hidden md:flex w-[10%] justify-end'>
+        <BsBookmarkStarFill size={24} color='orange' />
+      </div>
+    </div>
 
-            <div className='w-3/5 ml-1'>
-                <div className='flex justify-between gap-4 w-full'>
-                    <div className='text-red-600 font-medium'>
-                        {handleStar(+star).length > 0 && handleStar(+star).map((star, number) => {
-                            return (
-                                <span key={number}>{star}</span>
-                            )
-                        })}
-                        {title}
-                    </div>
-                    <div className='w-[10%] flex justify-end'>
-                        <BsBookmarkStarFill size={24} color='orange' />
-                    </div>
-                </div>
-                <div className='my-2 flex items-center justify-between gap-2'>
-                    <span className='font-bold flex-3 text-green-600  whitespace-nowrap overflow-hidden text-ellipsis'>{attributes?.price}</span>
-                    <span className='flex-1'>{attributes?.acreage}</span>
-                    <span className='flex-3 whitespace-nowrap overflow-hidden text-ellipsis'>
-                        {`${address.split(',')[address.split(',').length - 2]}${address.split(',')[address.split(',').length - 1]}`}
-                    </span>
-                </div>
-                <p className='text-gray-500 w-full h-[50px] text-ellipsis overflow-hidden'>
-                    {description}
-                </p>
-                <div className='flex items-center my-5 justify-between'>
-                    <div className=' flex items-center'>
-                        <img src={user.avatar||anonAvatar} alt="avatar" className='w-[30px] h-[30px] object-cover rounded-full' />
-                        <p>{user?.name}</p>
-                    </div>
-                    <div className='flex items-center gap-1'>
-                        <button
-                            type='button'
-                            className='bg-blue-700 text-white p-1 rounded-md w-[130px] h-[35px] object-cover text-[12px] '
-                        >
-                            {`Gọi ${user?.phone}`}
-                        </button>
-                        <button
-                            type='button'
-                            className='text-blue-700 px-1 rounded-md border border-blue-700 w-[60px] h-[35px] object-cover text-[12px]'
-                        >
-                            Nhắn zalo
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div className='my-2 flex flex-wrap items-center justify-between gap-2 text-sm'>
+      <span className='font-bold text-green-600 whitespace-nowrap truncate'>
+        {attributes?.price}
+      </span>
+      <span className='truncate'>{attributes?.acreage}</span>
+      <span className='truncate'>
+        {`${address?.split(',').slice(-2).join(', ')}`}
+      </span>
+    </div>
+
+    <p className='text-gray-500 w-full h-[120px] overflow-hidden text-ellipsis text-sm '>
+      {description}
+    </p>
+
+    <div className='flex flex-col sm:flex-row items-start sm:items-end justify-between gap-1'>
+      <div className='flex items-center gap-2'>
+        <img
+          src={user.avatar || anonAvatar}
+          alt="avatar"
+          className='w-[30px] h-[30px] object-cover rounded-full'
+        />
+        <p className='text-sm'>{user?.name}</p>
+      </div>
+      <div className='flex items-center gap-2 overflow-auto hide-scrollbar'>
+        <button
+          type='button'
+          className='bg-blue-700 text-white px-3 py-1 rounded-md text-xs whitespace-nowrap'
+        >
+          {`Gọi ${user?.phone}`}
+        </button>
+        <button
+          type='button'
+          className='text-blue-700 border border-blue-700 px-2 py-1 rounded-md text-xs whitespace-nowrap'
+        >
+          Nhắn zalo
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
     )
 }
 

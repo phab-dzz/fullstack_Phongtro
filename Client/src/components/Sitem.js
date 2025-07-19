@@ -15,7 +15,7 @@ import { useNavigate } from 'react-router-dom';
 
 
     return (
-        <div className="w-full  flex  items-center gap-2 py-2 border-b border-gray-300" onClick={handlenavigate}>
+        <div className="w-full  flex  items-center gap-2 py-2 border-b border-gray-300 overflow-auto hide-scrollbar" onClick={handlenavigate}>
            <img src={image[0]} alt="anh"
            className='w-[65px] h-[65px] object-cover rounded-md ' />
            <div className='flex flex-col justify-between w-full flex-auto gap-1'>

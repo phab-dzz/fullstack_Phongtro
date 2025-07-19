@@ -50,6 +50,9 @@ const Footer = () => {
             <small className='text-black'>
                 Dương Văn Phấn
             </small>
+            <small className='text-black'>
+                Dự án được thực hiện nhằm mục đích học tập và nghiên cứu, không sử dụng cho mục đích thương mại.
+            </small>
 
       </div>
     </div>
