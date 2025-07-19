@@ -1,0 +1,47 @@
+{
+  "development": {
+    "username": "db_trotot_user",
+    "password": "MSX4dCwDfw31MJrL3YocOnM8DshxXekE",
+    "database": "db_trotot",
+    "host": "dpg-d1th0gjipnbc73camq7g-a.singapore-postgres.render.com",
+    "port": 5432,
+    "dialect": "postgres",
+    "logging": false,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  },
+  "test": {
+    "username": "db_trotot_user",
+    "password": "MSX4dCwDfw31MJrL3YocOnM8DshxXekE",
+    "database": "db_trotot",
+    "host": "dpg-d1th0gjipnbc73camq7g-a.singapore-postgres.render.com",
+    "port": 5432,
+    "dialect": "postgres",
+    "logging": false,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  },
+  "production": {
+    "username": "db_trotot_user",
+    "password": "MSX4dCwDfw31MJrL3YocOnM8DshxXekE",
+    "database": "db_trotot",
+    "host": "dpg-d1th0gjipnbc73camq7g-a.singapore-postgres.render.com",
+    "port": 5432,
+    "dialect": "postgres",
+    "logging": false,
+    "dialectOptions": {
+      "ssl": {
+        "require": true,
+        "rejectUnauthorized": false
+      }
+    }
+  }
+}
